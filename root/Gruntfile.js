@@ -12,11 +12,11 @@ module.exports = function( grunt ) {
 					' * Licensed GPLv2+' +
 					' */\n'
 			},
-			{%= js_safe_name %}: {
+			{%= dir_name %}: {
 				src: [
-					'assets/js/src/{%= js_safe_name %}.js'
+					'assets/js/src/{%= dir_name %}.js'
 				],
-				dest: 'assets/js/{%= js_safe_name %}.js'
+				dest: 'assets/js/{%= dir_name %}.js'
 			}
 		},
 		jshint: {
@@ -40,12 +40,12 @@ module.exports = function( grunt ) {
 					exports: true,
 					module:  false
 				}
-			}		
+			}
 		},
 		uglify: {
 			all: {
 				files: {
-					'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
+					'assets/js/{%= dir_name %}.min.js': ['assets/js/{%= dir_name %}.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -66,7 +66,7 @@ module.exports = function( grunt ) {
 		sass:   {
 			all: {
 				files: {
-					'assets/css/{%= js_safe_name %}.css': 'assets/css/sass/{%= js_safe_name %}.scss'
+					'assets/css/{%= dir_name %}.css': 'assets/css/sass/{%= dir_name %}.scss'
 				}
 			}
 		},
@@ -74,9 +74,9 @@ module.exports = function( grunt ) {
 		less:   {
 			all: {
 				files: {
-					'assets/css/{%= js_safe_name %}.css': 'assets/css/less/{%= js_safe_name %}.less'
+					'assets/css/{%= dir_name %}.css': 'assets/css/less/{%= dir_name %}.less'
 				}
-			}		
+			}
 		},
 		{% } %}
 		cssmin: {
@@ -90,11 +90,11 @@ module.exports = function( grunt ) {
 			minify: {
 				expand: true,
 				{% if ('sass' === css_type || 'less' === css_type) { %}
-				cwd: 'assets/css/',				
-				src: ['{%= js_safe_name %}.css'],
+				cwd: 'assets/css/',
+				src: ['{%= dir_name %}.css'],
 				{% } else { %}
 				cwd: 'assets/css/src/',
-				src: ['{%= js_safe_name %}.css'],
+				src: ['{%= dir_name %}.css'],
 				{% } %}
 				dest: 'assets/css/',
 				ext: '.min.css'
@@ -135,7 +135,7 @@ module.exports = function( grunt ) {
 			}
 		}
 	} );
-	
+
 	// Load other tasks
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
@@ -147,7 +147,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	{% } %}
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	
+
 	// Default task.
 	{% if ('sass' === css_type) { %}
 	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );

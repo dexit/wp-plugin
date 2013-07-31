@@ -50,24 +50,39 @@ class {%= class_name %} {
 	 */
 	function __construct() {
 
-		// Wireup actions
-		add_action( 'init', array( $this, 'init' )  );
+		add_action( 'init', array( $this, 'hooks' )  );
+		add_action( 'admin_init', array( $this, 'admin_hooks' )  );
+		// Wireup filters
+		// Wireup shortcodes
+	}
 
+	/**
+	 * Init hooks
+	 * @since  0.1.0
+	 * @return null
+	 */
+	public function hooks() {
+		self::init();
+	}
+
+	/**
+	 * Hooks for the Admin
+	 * @since  0.1.0
+	 * @return null
+	 */
+	public function admin_hooks() {
 	}
 
 	/**
 	 * Default initialization for the plugin:
 	 * - Registers the default textdomain.
+	 * @since  0.1.0
 	 */
-	public function init() {
+	public static function init() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
 		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
 		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
-
-	// Wireup filters
-
-	// Wireup shortcodes
 
 }
 
@@ -80,7 +95,7 @@ ${%= class_name %} = new {%= class_name %};
  */
 function {%= prefix %}_activate() {
 	// First load the init scripts in case any rewrite functionality is being loaded
-	${%= class_name %}->init();
+	{%= class_name %}::init();
 
 	flush_rewrite_rules();
 }
