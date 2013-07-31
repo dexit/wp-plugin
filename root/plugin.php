@@ -6,6 +6,7 @@
  * Version:     0.1.0
  * Author:      {%= author_name %}
  * Author URI:  {%= author_url %}
+ * Donate link: {%= donate_link %}
  * License:     GPLv2+
  * Text Domain: {%= prefix %}
  * Domain Path: /languages
@@ -40,22 +41,46 @@ define( '{%= prefix_caps %}_VERSION', '0.1.0' );
 define( '{%= prefix_caps %}_URL',     plugin_dir_url( __FILE__ ) );
 define( '{%= prefix_caps %}_PATH',    dirname( __FILE__ ) . '/' );
 
-/**
- * Default initialization for the plugin:
- * - Registers the default textdomain.
- */
-function {%= prefix %}_init() {
-	$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
-	load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
-	load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
+class {%= class_name %} {
+
+	/**
+	 * Sets up our plugin
+	 * @since  0.1.0
+	 */
+	function __construct() {
+
+		// Wireup actions
+		add_action( 'init', array( $this, 'init' )  );
+
+	}
+
+	/**
+	 * Default initialization for the plugin:
+	 * - Registers the default textdomain.
+	 */
+	public function init() {
+		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
+		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
+		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
+	// Wireup filters
+
+	// Wireup shortcodes
+
 }
+
+// init our class
+${%= class_name %} = new {%= class_name %};
+
 
 /**
  * Activate the plugin
  */
 function {%= prefix %}_activate() {
 	// First load the init scripts in case any rewrite functionality is being loaded
-	{%= prefix %}_init();
+	${%= class_name %}->init();
 
 	flush_rewrite_rules();
 }
@@ -69,10 +94,3 @@ function {%= prefix %}_deactivate() {
 
 }
 register_deactivation_hook( __FILE__, '{%= prefix %}_deactivate' );
-
-// Wireup actions
-add_action( 'init', '{%= prefix %}_init' );
-
-// Wireup filters
-
-// Wireup shortcodes
