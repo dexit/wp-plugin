@@ -24,18 +24,18 @@ exports.warnOn = '*';
 exports.template = function( grunt, init, done ) {
 	init.process( {}, [
 		// Prompt for these values.
-		init.prompt( 'title', 'DsgnWrks Plugin' ),
+		init.prompt( 'title', 'WebDevStudios Plugin' ),
 		{
 			name   : 'prefix',
 			message: 'PHP function prefix (alpha and underscore characters only)',
 			default: 'wpplugin'
 		},
-		init.prompt( 'description', 'The best WordPress extension ever made!' ),
-		init.prompt( 'homepage', 'http://dsgnwrks.pro/plugins/' ),
-		init.prompt( 'donate_link', 'http://dsgnwrks.pro/give' ),
-		init.prompt( 'author_name', 'DsgnWrks' ),
-		init.prompt( 'author_email', 'justin@dsgnwrks.pro' ),
-		init.prompt( 'author_url', 'http://dsgnwrks.pro' ),
+		init.prompt( 'description', 'The best WordPress plugin ever made!' ),
+		init.prompt( 'homepage', 'http://webdevstudios.com' ),
+		init.prompt( 'donate_link', 'http://webdevstudios.com' ),
+		init.prompt( 'author_name', 'WebDevStudios' ),
+		init.prompt( 'author_email', 'contact@webdevstudios.com' ),
+		init.prompt( 'author_url', 'http://webdevstudios.com' ),
 		{
 			name: 'css_type',
 			message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
