@@ -33,7 +33,7 @@ exports.template = function( grunt, init, done ) {
 		init.prompt( 'description', 'The best WordPress extension ever made!' ),
 		init.prompt( 'homepage', 'http://dsgnwrks.pro/plugins/' ),
 		init.prompt( 'donate_link', 'http://dsgnwrks.pro/give' ),
-		init.prompt( 'author_name', 'DsgnWrks' ),
+		init.prompt( 'author_name', 'jtsternberg' ),
 		init.prompt( 'author_email', 'justin@dsgnwrks.pro' ),
 		init.prompt( 'author_url', 'http://dsgnwrks.pro' ),
 		{

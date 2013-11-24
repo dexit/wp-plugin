@@ -44,6 +44,21 @@ define( '{%= prefix_caps %}_PATH',    dirname( __FILE__ ) . '/' );
 
 class {%= class_name %} {
 
+	// A single instance of this class.
+	public static $instance = null;
+
+	/**
+	 * Creates or returns an instance of this class.
+	 * @since  0.1.0
+	 * @return {%= class_name %} A single instance of this class.
+	 */
+	public static function go() {
+		if ( self::$instance === null )
+			self::$instance = new self();
+
+		return self::$instance;
+	}
+
 	/**
 	 * Sets up our plugin
 	 * @since  0.1.0
@@ -87,8 +102,7 @@ class {%= class_name %} {
 }
 
 // init our class
-${%= class_name %} = new {%= class_name %};
-
+${%= class_name %}::go();
 
 /**
  * Activate the plugin
