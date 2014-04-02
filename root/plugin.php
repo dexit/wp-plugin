@@ -56,8 +56,8 @@ class {%= class_name %} {
 
 		register_activation_hook( __FILE__, '_activate' );
 		register_deactivation_hook( __FILE__, '_deactivate' );
-		add_action( 'init', array( $this, 'hooks' )  );
-		add_action( 'admin_init', array( $this, 'admin_hooks' )  );
+		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'admin_hooks' ) );
 	}
 
 	/**
@@ -81,7 +81,7 @@ class {%= class_name %} {
 	 * @since  0.1.0
 	 * @return null
 	 */
-	public function hooks() {
+	public function init() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
 		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
 		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
