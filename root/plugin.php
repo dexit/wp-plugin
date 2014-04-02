@@ -37,23 +37,43 @@
  */
 
 // Useful global constants
-define( '{%= prefix_caps %}_VERSION', '0.1.0' );
-define( '{%= prefix_caps %}_URL',     plugin_dir_url( __FILE__ ) );
-define( '{%= prefix_caps %}_PATH',    dirname( __FILE__ ) . '/' );
+define( '{%= prefix_caps %}_URL', plugin_dir_url( __FILE__ ) );
+define( '{%= prefix_caps %}_PATH', dirname( __FILE__ ) . '/' );
 
 
 class {%= class_name %} {
+
+	const VERSION = '0.1.0';
 
 	/**
 	 * Sets up our plugin
 	 * @since  0.1.0
 	 */
-	function __construct() {
+	public function __construct() {
+	}
 
+	public function hooks() {
+
+		register_activation_hook( __FILE__, '_activate' );
+		register_deactivation_hook( __FILE__, '_deactivate' );
 		add_action( 'init', array( $this, 'hooks' )  );
 		add_action( 'admin_init', array( $this, 'admin_hooks' )  );
-		// Wireup filters
-		// Wireup shortcodes
+	}
+
+	/**
+	 * Activate the plugin
+	 */
+	function _activate() {
+		// Make sure any rewrite functionality has been loaded
+		flush_rewrite_rules();
+	}
+
+	/**
+	 * Deactivate the plugin
+	 * Uninstall routines should be in uninstall.php
+	 */
+	function _deactivate() {
+
 	}
 
 	/**
@@ -62,7 +82,9 @@ class {%= class_name %} {
 	 * @return null
 	 */
 	public function hooks() {
-		self::init();
+		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
+		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
+		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -73,39 +95,9 @@ class {%= class_name %} {
 	public function admin_hooks() {
 	}
 
-	/**
-	 * Default initialization for the plugin:
-	 * - Registers the default textdomain.
-	 * @since  0.1.0
-	 */
-	public static function init() {
-		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
-		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
-		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-	}
-
 }
 
 // init our class
-${%= class_name %} = new {%= class_name %};
+${%= class_name %} = new {%= class_name %}();
+${%= class_name %}->hooks();
 
-
-/**
- * Activate the plugin
- */
-function {%= prefix %}_activate() {
-	// First load the init scripts in case any rewrite functionality is being loaded
-	{%= class_name %}::init();
-
-	flush_rewrite_rules();
-}
-register_activation_hook( __FILE__, '{%= prefix %}_activate' );
-
-/**
- * Deactivate the plugin
- * Uninstall routines should be in uninstall.php
- */
-function {%= prefix %}_deactivate() {
-
-}
-register_deactivation_hook( __FILE__, '{%= prefix %}_deactivate' );

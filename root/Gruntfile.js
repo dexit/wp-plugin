@@ -26,20 +26,22 @@ module.exports = function( grunt ) {
 				'assets/js/test/**/*.js'
 			],
 			options: {
-				curly:   true,
-				eqeqeq:  true,
-				immed:   true,
-				latedef: true,
-				newcap:  true,
-				noarg:   true,
-				sub:     true,
-				undef:   true,
-				boss:    true,
-				eqnull:  true,
-				globals: {
-					exports: true,
-					module:  false
-				}
+				curly   : true,
+				eqeqeq  : true,
+				immed   : true,
+				latedef : true,
+				newcap  : true,
+				noarg   : true,
+				sub     : true,
+				unused  : true,
+				undef   : true,
+				boss    : true,
+				eqnull  : true,
+				globals : {
+					exports : true,
+					module  : false
+				},
+				predef  :['document','window']
 			}
 		},
 		uglify: {

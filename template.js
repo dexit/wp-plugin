@@ -59,7 +59,7 @@ exports.template = function( grunt, init, done ) {
 		// Class name
 		props.class_name = props.title.replace( /\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace( /\s+/g, '_' );
 		// Development prefix (i.e. to prefix PHP function names, variables)
-		props.prefix = props.prefix.replace('/[^a-z_]/i', '').toLowerCase();
+		props.prefix = props.name.replace('/[^a-z_]/i', '').toLowerCase();
 		// Development prefix in all caps (e.g. for constants)
 		props.prefix_caps = props.prefix.toUpperCase();
 		// An additional value, safe to use as a JavaScript identifier.
