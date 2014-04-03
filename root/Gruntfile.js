@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 					' * Licensed GPLv2+' +
 					' */\n'
 			},
-			{%= dir_name %}: {
+			'{%= dir_name %}': {
 				src: [
 					'assets/js/src/{%= dir_name %}.js'
 				],

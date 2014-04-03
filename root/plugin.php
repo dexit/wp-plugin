@@ -57,7 +57,7 @@ class {%= class_name %} {
 		register_activation_hook( __FILE__, '_activate' );
 		register_deactivation_hook( __FILE__, '_deactivate' );
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_hooks' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class {%= class_name %} {
 	 * @since  0.1.0
 	 * @return null
 	 */
-	public function admin_hooks() {
+	public function admin_init() {
 	}
 
 }
