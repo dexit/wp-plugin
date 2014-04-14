@@ -54,8 +54,8 @@ class {%= class_name %} {
 
 	public function hooks() {
 
-		register_activation_hook( __FILE__, '_activate' );
-		register_deactivation_hook( __FILE__, '_deactivate' );
+		register_activation_hook( __FILE__, array( $this, '_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, '_deactivate' ) );
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
