@@ -2,7 +2,9 @@ module.exports = function( grunt ) {
 
 	// Project configuration
 	grunt.initConfig( {
+
 		pkg:    grunt.file.readJSON( 'package.json' ),
+
 		concat: {
 			options: {
 				stripBanners: true,
@@ -19,6 +21,7 @@ module.exports = function( grunt ) {
 				dest: 'assets/js/{%= dir_name %}.js'
 			}
 		},
+
 		jshint: {
 			all: [
 				'Gruntfile.js',
@@ -44,6 +47,7 @@ module.exports = function( grunt ) {
 				predef  :['document','window']
 			}
 		},
+
 		uglify: {
 			all: {
 				files: {
@@ -61,9 +65,11 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},
+
 		{% if ('sass' === css_type) { %}
 		sass:   {
 			all: {
@@ -72,6 +78,7 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		{% } else if ('less' === css_type) { %}
 		less:   {
 			all: {
@@ -80,6 +87,7 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		{% } %}
 		cssmin: {
 			options: {
@@ -102,6 +110,7 @@ module.exports = function( grunt ) {
 				ext: '.min.css'
 			}
 		},
+
 		watch:  {
 			{% if ('sass' === css_type) { %}
 			sass: {
@@ -136,6 +145,7 @@ module.exports = function( grunt ) {
 				}
 			}
 		}
+
 	} );
 
 	// Load other tasks
