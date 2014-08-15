@@ -39,8 +39,8 @@
 class {%= class_name %} {
 
 	const VERSION = '0.1.0';
-	public static $url  = '';
-	public static $path = '';
+	protected static $url  = '';
+	protected static $path = '';
 
 	/**
 	 * Sets up our plugin
@@ -93,6 +93,25 @@ class {%= class_name %} {
 	 * @return null
 	 */
 	public function admin_hooks() {
+	}
+
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @param string $field
+	 *
+	 * @throws Exception Throws an exception if the field is invalid.
+	 *
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'url':
+			case 'path':
+				return self::$field;
+			default:
+				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
+		}
 	}
 
 }
