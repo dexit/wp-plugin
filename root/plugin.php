@@ -42,7 +42,7 @@
  * @param  string $class_name Name of the class being requested
  */
 function {%= prefix %}_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) ) {
+	if ( class_exists( $class_name, false ) || false === stripos( $class_name, '{%= class_name %}_' ) ) {
 		return;
 	}
 
