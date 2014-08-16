@@ -1,8 +1,16 @@
 {
+<<<<<<< HEAD
 	"plugin.php": "{%= dir_name %}.php",
 	"assets/css/less/plugin.less": "assets/css/less/{%= dir_name %}.less",
 	"assets/css/sass/plugin.scss": "assets/css/sass/{%= dir_name %}.scss",
 	"assets/css/src/plugin.css": "assets/css/src/{%= dir_name %}.css",
 	"assets/js/src/plugin.js": "assets/js/src/{%= dir_name %}.js",
+=======
+	"plugin.php": "{%= js_safe_name %}.php",
+	"assets/css/less/plugin.less": "assets/css/less/{%= js_safe_name %}.less",
+	"assets/css/sass/plugin.scss": "assets/css/sass/{%= js_safe_name %}.scss",
+	"assets/css/src/plugin.css": "assets/css/src/{%= js_safe_name %}.css",
+	"assets/js/src/plugin.js": "assets/js/src/{%= js_safe_name %}.js",
+>>>>>>> 21ddf0729f3ad538f7b76b0980bc5eefc8f291d1
 	"languages/plugin.pot": "languages/{%= prefix %}.pot"
 }

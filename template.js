@@ -24,18 +24,17 @@ exports.warnOn = '*';
 exports.template = function( grunt, init, done ) {
 	init.process( {}, [
 		// Prompt for these values.
-		init.prompt( 'title', 'WebDevStudios Plugin' ),
+		init.prompt( 'title', 'WP Plugin' ),
 		{
 			name   : 'prefix',
 			message: 'PHP function prefix (alpha and underscore characters only)',
 			default: 'wpplugin'
 		},
-		init.prompt( 'description', 'The best WordPress plugin ever made!' ),
-		init.prompt( 'homepage', 'http://webdevstudios.com' ),
-		init.prompt( 'donate_link', 'http://webdevstudios.com' ),
-		init.prompt( 'author_name', 'WebDevStudios' ),
-		init.prompt( 'author_email', 'contact@webdevstudios.com' ),
-		init.prompt( 'author_url', 'http://webdevstudios.com' ),
+		init.prompt( 'description', 'The best WordPress extension ever made!' ),
+		init.prompt( 'homepage', 'http://wordpress.org/plugins' ),
+		init.prompt( 'author_name' ),
+		init.prompt( 'author_email' ),
+		init.prompt( 'author_url' ),
 		{
 			name: 'css_type',
 			message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
@@ -64,8 +63,6 @@ exports.template = function( grunt, init, done ) {
 		props.prefix_caps = props.prefix.toUpperCase();
 		// An additional value, safe to use as a JavaScript identifier.
 		props.js_safe_name = props.name.replace(/[\W_]+/g, '_').replace(/^(\d)/, '_$1');
-		// directory name (slug)
-		props.dir_name = props.name.replace(/[\W_]+/g, '-').replace(/^(\d)/, '-$1');
 		// An additional value that won't conflict with NodeUnit unit tests.
 		props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
 		props.js_safe_name_caps = props.js_safe_name.toUpperCase();
@@ -75,24 +72,24 @@ exports.template = function( grunt, init, done ) {
 
 		switch( props.css_type.toLowerCase()[0] ) {
 			case 'l':
-				delete files[ 'assets/css/sass/' + props.dir_name + '.scss'];
-				delete files[ 'assets/css/src/' + props.dir_name + '.css' ];
-
+				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
+				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
+				
 				props.devDependencies["grunt-contrib-less"] = "~0.5.0";
 				props.css_type = 'less';
 				break;
 			case 'n':
 			case undefined:
-				delete files[ 'assets/css/less/' + props.dir_name + '.less'];
-				delete files[ 'assets/css/sass/' + props.dir_name + '.scss'];
-
+				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
+				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
+				
 				props.css_type = 'none';
 				break;
 			// SASS is the default
 			default:
-				delete files[ 'assets/css/less/' + props.dir_name + '.less'];
-				delete files[ 'assets/css/src/' + props.dir_name + '.css' ];
-
+				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
+				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
+				
 				props.devDependencies["grunt-contrib-sass"] = "~0.2.2";
 				props.css_type = 'sass';
 				break;
