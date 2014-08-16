@@ -2,7 +2,9 @@ module.exports = function( grunt ) {
 
 	// Project configuration
 	grunt.initConfig( {
+
 		pkg:    grunt.file.readJSON( 'package.json' ),
+
 		concat: {
 			options: {
 				stripBanners: true,
@@ -19,6 +21,7 @@ module.exports = function( grunt ) {
 				dest: 'assets/js/{%= js_safe_name %}.js'
 			}
 		},
+
 		jshint: {
 			all: [
 				'Gruntfile.js',
@@ -26,22 +29,25 @@ module.exports = function( grunt ) {
 				'assets/js/test/**/*.js'
 			],
 			options: {
-				curly:   true,
-				eqeqeq:  true,
-				immed:   true,
-				latedef: true,
-				newcap:  true,
-				noarg:   true,
-				sub:     true,
-				undef:   true,
-				boss:    true,
-				eqnull:  true,
-				globals: {
-					exports: true,
-					module:  false
-				}
+				curly   : true,
+				eqeqeq  : true,
+				immed   : true,
+				latedef : true,
+				newcap  : true,
+				noarg   : true,
+				sub     : true,
+				unused  : true,
+				undef   : true,
+				boss    : true,
+				eqnull  : true,
+				globals : {
+					exports : true,
+					module  : false
+				},
+				predef  :['document','window']
 			}
 		},
+
 		uglify: {
 			all: {
 				files: {
@@ -59,9 +65,11 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},
+
 		{% if ('sass' === css_type) { %}
 		sass:   {
 			all: {
@@ -70,6 +78,7 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		{% } else if ('less' === css_type) { %}
 		less:   {
 			all: {
@@ -78,6 +87,7 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
 		{% } %}
 		cssmin: {
 			options: {
@@ -100,6 +110,7 @@ module.exports = function( grunt ) {
 				ext: '.min.css'
 			}
 		},
+
 		watch:  {
 			{% if ('sass' === css_type) { %}
 			sass: {
@@ -133,42 +144,8 @@ module.exports = function( grunt ) {
 					debounceDelay: 500
 				}
 			}
-		},
-		clean: {
-			main: ['release/<%= pkg.version %>']
-		},
-		copy: {
-			// Copy the plugin to a versioned release directory
-			main: {
-				src:  [
-					'**',
-					'!node_modules/**',
-					'!release/**',
-					'!.git/**',
-					'!.sass-cache/**',
-					'!css/src/**',
-					'!js/src/**',
-					'!img/src/**',
-					'!Gruntfile.js',
-					'!package.json',
-					'!.gitignore',
-					'!.gitmodules'
-				],
-				dest: 'release/<%= pkg.version %>/'
-			}		
-		},
-		compress: {
-			main: {
-				options: {
-					mode: 'zip',
-					archive: './release/{%= js_safe_name %}.<%= pkg.version %>.zip'
-				},
-				expand: true,
-				cwd: 'release/<%= pkg.version %>/',
-				src: ['**/*'],
-				dest: '{%= js_safe_name %}/'
-			}		
 		}
+
 	} );
 
 	// Load other tasks
@@ -182,10 +159,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	{% } %}
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks( 'grunt-contrib-clean' );
-	grunt.loadNpmTasks( 'grunt-contrib-copy' );
-	grunt.loadNpmTasks( 'grunt-contrib-compress' );
-	
+
 	// Default task.
 	{% if ('sass' === css_type) { %}
 	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
@@ -194,8 +168,6 @@ module.exports = function( grunt ) {
 	{% } else { %}
 	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'cssmin'] );
 	{% } %}
-	
-	grunt.registerTask( 'build', ['default', 'clean', 'copy', 'compress'] );
 
 	grunt.util.linefeed = '\n';
 };

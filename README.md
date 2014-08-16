@@ -12,13 +12,13 @@ Once grunt-init is installed, place this template in your `~/.grunt-init/` direc
 ### Linux/Mac Users
 
 ```
-git clone git@github.com:10up/grunt-wp-plugin.git ~/.grunt-init/wp-plugin
+git clone https://github.com/jtsternberg/grunt-wp-plugin.git ~/.grunt-init/wp-plugin
 ```
 
 ### Windows Users
 
 ```
-git clone git@github.com:10up/grunt-wp-plugin.git %USERPROFILE%/.grunt-init/wp-plugin
+git clone https://github.com/jtsternberg/grunt-wp-plugin.git %USERPROFILE%/.grunt-init/wp-plugin
 ```
 
 ## Usage
@@ -49,15 +49,16 @@ After running the init command above, you will be presented with a standard dire
     .. .. .. /less
     .. .. /js
     .. .. .. /src
-    .. /images
-    .. .. /src
+    .. .. /images
+    .. .. .. /src
     .. /includes
     .. /languages
     .. .. plugin.pot
     .. .gitignore
     .. Gruntfile.js
     .. plugin.php
-    .. readme.php
+    .. README.md
+    .. readme.txt
 
 ### CSS vs Sass vs LESS
 
@@ -73,15 +74,4 @@ You should only ever be modifying script files in the `/js/src` directory.  Grun
 
 ### Images
 
-The `/images/src` directory exists only to allow you to keep track of source files (like PSDs or separate images that have been merged into sprites).  This helps keep source files under version control, and allows you to bundle them with the distribution of your new GPL plugin.
-
-## Release History
-
- * 2013-08-15   v0.1.7   Fix a typo in rename.json.
- * 2013-08-13   v0.1.6   Add deployment builder. Remove dates from Grunt headers.
- * 2013-07-18	v0.1.5	 Remove /extend references (props @trepmal).
- * 2013-05-30   v0.1.4   Fix broken package.json generator.
- * 2013-05-06   v0.1.3   Several I18N updates (props @bradyvercher)
- * 2013-04-29   v0.1.2   Folder restructuring and renaming.
- * 2013-04-26   v0.1.1   Minor bug fixes.
- * 2013-04-25   v0.1.0   Initial public release.
+The `assets/images/src` directory exists only to allow you to keep track of source files (like PSDs or separate images that have been merged into sprites).  This helps keep source files under version control, and allows you to bundle them with the distribution of your new GPL plugin.
