@@ -6,7 +6,7 @@
  * Version:     0.1.0
  * Author:      {%= author_name %}
  * Author URI:  {%= author_url %}
- * Donate link: {%= donate_link %}
+ * Donate link: {%= homepage %}
  * License:     GPLv2+
  * Text Domain: {%= prefix %}
  * Domain Path: /languages
@@ -35,12 +35,26 @@
  * Copyright (c) 2013 10up, LLC
  * https://github.com/10up/grunt-wp-plugin
  */
+{% if (autoloader) { %}
+/**
+ * Autoloads files with classes when needed
+ * @since  0.1.0
+ * @param  string $class_name Name of the class being requested
+ */
+function {%= prefix %}_autoload_classes( $class_name ) {
+	if ( class_exists( $class_name, false ) ) {
+		return;
+	}
+
+	{%= class_name %}::include_file( $class_name );
+}
+spl_autoload_register( '{%= prefix %}_autoload_classes' );{% } %}
 
 class {%= class_name %} {
 
 	const VERSION = '0.1.0';
-	protected static $url  = '';
-	protected static $path = '';
+	{% if (!autoloader) { %}protected static $url  = '';
+	protected static $path = '';{% } %}
 
 	/**
 	 * Sets up our plugin
@@ -94,6 +108,31 @@ class {%= class_name %} {
 	 */
 	public function admin_hooks() {
 	}
+
+	{% if (autoloader) { %}/**
+	 * Autoloads files with classes when needed
+	 * @since  0.1.0
+	 * @param  string $filename Name of the file to be included
+	 */
+	public static function include_file( $filename ) {
+		$filename = strtolower( str_ireplace( '{%= class_name %}_', '', $filename ) );
+		$file = self::dir( 'inc/'. $filename .'.php' );
+		if ( file_exists( $file ) ) {
+			return include_once( $file );
+		}
+	}
+
+	public static function dir( $path = '' ) {
+		static $dir;
+		$dir = $dir ? $dir : trailingslashit( dirname( __FILE__ ) );
+		return $dir . $path;
+	}
+
+	public static function url( $path = '' ) {
+		static $url;
+		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
+		return $url . $path;
+	}{% } %}
 
 	/**
 	 * Magic getter for our object.

@@ -30,15 +30,20 @@ exports.template = function( grunt, init, done ) {
 			message: 'PHP function prefix (alpha and underscore characters only)',
 			default: 'wpplugin'
 		},
-		init.prompt( 'description', 'The best WordPress extension ever made!' ),
-		init.prompt( 'homepage', 'http://wordpress.org/plugins' ),
+		init.prompt( 'description', 'The best WordPress plugin ever made!' ),
+		init.prompt( 'homepage', 'http://dsgnwrks.pro' ),
 		init.prompt( 'author_name' ),
 		init.prompt( 'author_email' ),
-		init.prompt( 'author_url' ),
+		init.prompt( 'author_url', 'http://dsgnwrks.pro' ),
 		{
 			name: 'css_type',
 			message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
 			default: 'Sass'
+		},
+		{
+			name: 'autoloader',
+			message: 'Autoload: Do you want to add an autoloader for this project? Y/N',
+			default: 'Y'
 		}
 	], function( err, props ) {
 		props.keywords = [];
@@ -74,7 +79,7 @@ exports.template = function( grunt, init, done ) {
 			case 'l':
 				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
 				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
-				
+
 				props.devDependencies["grunt-contrib-less"] = "~0.5.0";
 				props.css_type = 'less';
 				break;
@@ -82,18 +87,21 @@ exports.template = function( grunt, init, done ) {
 			case undefined:
 				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
 				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
-				
+
 				props.css_type = 'none';
 				break;
 			// SASS is the default
 			default:
 				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
 				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
-				
+
 				props.devDependencies["grunt-contrib-sass"] = "~0.2.2";
 				props.css_type = 'sass';
 				break;
 		}
+
+		var autoloader = props.autoloader.toLowerCase()[0];
+		props.autoloader = 'y' === autoloader ? true : false;
 
 		console.log( files );
 
