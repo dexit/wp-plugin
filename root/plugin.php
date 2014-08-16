@@ -46,7 +46,9 @@ function {%= prefix %}_autoload_classes( $class_name ) {
 		return;
 	}
 
-	{%= class_name %}::include_file( $class_name );
+	$filename = strtolower( str_ireplace( '{%= class_name %}_', '', $class_name ) );
+
+	{%= class_name %}::include_file( $filename );
 }
 spl_autoload_register( '{%= prefix %}_autoload_classes' );
 {% } %}
@@ -119,7 +121,6 @@ class {%= class_name %} {
 	 * @param  string $filename Name of the file to be included
 	 */
 	public static function include_file( $filename ) {
-		$filename = strtolower( str_ireplace( '{%= class_name %}_', '', $filename ) );
 		$file = self::dir( 'inc/'. $filename .'.php' );
 		if ( file_exists( $file ) ) {
 			return include_once( $file );
