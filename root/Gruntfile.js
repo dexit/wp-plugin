@@ -1,5 +1,17 @@
 module.exports = function( grunt ) {
 
+	var bannerTemplate = '/**\n' +
+		' * <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+		' * <%= pkg.homepage %>\n' +
+		' *\n' +
+		' * Copyright (c) <%= grunt.template.today("yyyy") %>;\n' +
+		' * Licensed GPLv2+\n' +
+		' */\n';
+
+	var compactBannerTemplate = '/**\n' +
+		' * <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> | <%= pkg.homepage %> | Copyright (c) <%= grunt.template.today("yyyy") %>; | Licensed GPLv2+\n' +
+		' */\n';
+
 	// Project configuration
 	grunt.initConfig( {
 
@@ -8,11 +20,7 @@ module.exports = function( grunt ) {
 		concat: {
 			options: {
 				stripBanners: true,
-				banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-					' * <%= pkg.homepage %>\n' +
-					' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-					' * Licensed GPLv2+' +
-					' */\n'
+				banner: bannerTemplate
 			},
 			{%= js_safe_name %}: {
 				src: [
@@ -54,11 +62,7 @@ module.exports = function( grunt ) {
 					'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
 				},
 				options: {
-					banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-						' * <%= pkg.homepage %>\n' +
-						' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-						' * Licensed GPLv2+' +
-						' */\n',
+					banner: compactBannerTemplate,
 					mangle: {
 						except: ['jQuery']
 					}
@@ -91,16 +95,12 @@ module.exports = function( grunt ) {
 		{% } %}
 		cssmin: {
 			options: {
-				banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-					' * <%= pkg.homepage %>\n' +
-					' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-					' * Licensed GPLv2+' +
-					' */\n'
+				banner: bannerTemplate
 			},
 			minify: {
 				expand: true,
 				{% if ('sass' === css_type || 'less' === css_type) { %}
-				cwd: 'assets/css/',				
+				cwd: 'assets/css/',
 				src: ['{%= js_safe_name %}.css'],
 				{% } else { %}
 				cwd: 'assets/css/src/',
