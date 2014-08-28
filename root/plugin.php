@@ -67,9 +67,11 @@ class {%= class_name %} {
 	 * @since  0.1.0
 	 */
 	public function __construct() {
+		{% if (!autoloader) { %}
 		// Useful variables
 		self::$url  = trailingslashit( plugin_dir_url( __FILE__ ) );
 		self::$path = trailingslashit( dirname( __FILE__ ) );
+		{% } %}
 	}
 
 	public function hooks() {
