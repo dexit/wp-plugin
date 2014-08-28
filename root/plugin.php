@@ -121,7 +121,7 @@ class {%= class_name %} {
 	 * @param  string $filename Name of the file to be included
 	 */
 	public static function include_file( $filename ) {
-		$file = self::dir( 'inc/'. $filename .'.php' );
+		$file = self::dir( 'includes/'. $filename .'.php' );
 		if ( file_exists( $file ) ) {
 			return include_once( $file );
 		}
