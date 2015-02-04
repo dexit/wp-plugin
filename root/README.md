@@ -1,7 +1,7 @@
 # {%= title %} #
-**Contributors:**      jtsternberg  
+**Contributors:**      WebDevStudios  
 **Donate link:**       {%= donate_link %}  
-**Tags:**              
+**Tags:**  
 **Requires at least:** 3.6.0  
 **Tested up to:**      3.6.0  
 **Stable tag:**        0.1.0  
