@@ -146,6 +146,23 @@ module.exports = function( grunt ) {
 			}
 		}
 
+		/**
+		 * check WP Coding standards
+		 * https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+		 */
+		phpcs: {
+			application: {
+				dir: [
+					'**/*.php',
+					'!**/node_modules/**'
+				]
+			},
+			options: {
+				bin: '~/phpcs/scripts/phpcs',
+				standard: 'WordPress'
+			}
+		},
+
 	} );
 
 	// Load other tasks
@@ -159,6 +176,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	{% } %}
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	{% if (wpcs) { %}
+	grunt.loadNpmTasks('grunt-phpcs');
+	{% } %}
 
 	// Default task.
 	{% if ('sass' === css_type) { %}

@@ -44,6 +44,11 @@ exports.template = function( grunt, init, done ) {
 			name: 'autoloader',
 			message: 'Autoload: Do you want to add an autoloader for this project? Y/N',
 			default: 'Y'
+		},
+		{
+			name: 'wpcs',
+			message: 'WordPress Coding Standards grunt task: You need to have PHP Code Sniffer installed. Y/N',
+			default: 'Y'
 		}
 	], function( err, props ) {
 		props.keywords = [];
@@ -56,6 +61,7 @@ exports.template = function( grunt, init, done ) {
 			'grunt-contrib-jshint'   : '~0.1.1',
 			'grunt-contrib-nodeunit' : '~0.1.2',
 			'grunt-contrib-watch'    : '~0.2.0',
+			'grunt-phpcs'            : '~0.2.3'
 		};
 
 		// Sanitize names where we need to for PHP/JS
@@ -102,6 +108,9 @@ exports.template = function( grunt, init, done ) {
 
 		var autoloader = props.autoloader.toLowerCase()[0];
 		props.autoloader = 'y' === autoloader ? true : false;
+
+		var wpcs = props.wpcs.toLowerCase()[0];
+		props.wpcs = 'y' === wpcs ? true : false;
 
 		console.log( files );
 
