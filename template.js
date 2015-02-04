@@ -77,29 +77,30 @@ exports.template = function( grunt, init, done ) {
 		// An additional value that won't conflict with NodeUnit unit tests.
 		props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
 		props.js_safe_name_caps = props.js_safe_name.toUpperCase();
+		props.wpfilename = props.js_safe_name.replace( /_/g, '-' );
 
 		// Files to copy and process
 		var files = init.filesToCopy( props );
 
 		switch( props.css_type.toLowerCase()[0] ) {
 			case 'l':
-				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
-				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
+				delete files[ 'assets/css/sass/' + props.wpfilename + '.scss'];
+				delete files[ 'assets/css/src/' + props.wpfilename + '.css' ];
 
 				props.devDependencies["grunt-contrib-less"] = "~0.5.0";
 				props.css_type = 'less';
 				break;
 			case 'n':
 			case undefined:
-				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
-				delete files[ 'assets/css/sass/' + props.js_safe_name + '.scss'];
+				delete files[ 'assets/css/less/' + props.wpfilename + '.less'];
+				delete files[ 'assets/css/sass/' + props.wpfilename + '.scss'];
 
 				props.css_type = 'none';
 				break;
 			// SASS is the default
 			default:
-				delete files[ 'assets/css/less/' + props.js_safe_name + '.less'];
-				delete files[ 'assets/css/src/' + props.js_safe_name + '.css' ];
+				delete files[ 'assets/css/less/' + props.wpfilename + '.less'];
+				delete files[ 'assets/css/src/' + props.wpfilename + '.css' ];
 
 				props.devDependencies["grunt-contrib-sass"] = "~0.2.2";
 				props.css_type = 'sass';

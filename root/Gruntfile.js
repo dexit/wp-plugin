@@ -24,9 +24,9 @@ module.exports = function( grunt ) {
 			},
 			{%= js_safe_name %}: {
 				src: [
-					'assets/js/src/{%= js_safe_name %}.js'
+					'assets/js/src/{%= wpfilename %}.js'
 				],
-				dest: 'assets/js/{%= js_safe_name %}.js'
+				dest: 'assets/js/{%= wpfilename %}.js'
 			}
 		},
 
@@ -59,7 +59,7 @@ module.exports = function( grunt ) {
 		uglify: {
 			all: {
 				files: {
-					'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
+					'assets/js/{%= wpfilename %}.min.js': ['assets/js/{%= wpfilename %}.js']
 				},
 				options: {
 					banner: compactBannerTemplate,
@@ -78,7 +78,7 @@ module.exports = function( grunt ) {
 		sass:   {
 			all: {
 				files: {
-					'assets/css/{%= js_safe_name %}.css': 'assets/css/sass/{%= js_safe_name %}.scss'
+					'assets/css/{%= wpfilename %}.css': 'assets/css/sass/{%= wpfilename %}.scss'
 				}
 			}
 		},
@@ -87,7 +87,7 @@ module.exports = function( grunt ) {
 		less:   {
 			all: {
 				files: {
-					'assets/css/{%= js_safe_name %}.css': 'assets/css/less/{%= js_safe_name %}.less'
+					'assets/css/{%= wpfilename %}.css': 'assets/css/less/{%= wpfilename %}.less'
 				}
 			}
 		},
@@ -101,10 +101,10 @@ module.exports = function( grunt ) {
 				expand: true,
 				{% if ('sass' === css_type || 'less' === css_type) { %}
 				cwd: 'assets/css/',
-				src: ['{%= js_safe_name %}.css'],
+				src: ['{%= wpfilename %}.css'],
 				{% } else { %}
 				cwd: 'assets/css/src/',
-				src: ['{%= js_safe_name %}.css'],
+				src: ['{%= wpfilename %}.css'],
 				{% } %}
 				dest: 'assets/css/',
 				ext: '.min.css'

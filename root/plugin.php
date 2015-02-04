@@ -46,7 +46,11 @@ function {%= prefix %}_autoload_classes( $class_name ) {
 		return;
 	}
 
-	$filename = strtolower( str_ireplace( '{%= class_name %}_', '', $class_name ) );
+	$filename = strtolower( str_ireplace(
+		array( '{%= class_name %}_', '_' ),
+		array( '', '-' ),
+		$class_name
+	) );
 
 	{%= class_name %}::include_file( $filename );
 }
