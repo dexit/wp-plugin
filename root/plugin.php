@@ -182,3 +182,10 @@ class {%= class_name %} {
 $GLOBALS['{%= class_name %}'] = new {%= class_name %}();
 $GLOBALS['{%= class_name %}']->hooks();
 
+/**
+ * Grab the ${%= class_name %} object and return it
+ */
+function {%= prefix %}() {
+	global ${%= class_name %};
+	return ${%= class_name %};
+}
