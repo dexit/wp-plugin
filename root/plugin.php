@@ -179,6 +179,6 @@ class {%= class_name %} {
 }
 
 // init our class
-${%= class_name %} = new {%= class_name %}();
-${%= class_name %}->hooks();
+$GLOBALS['{%= class_name %}'] = new {%= class_name %}();
+$GLOBALS['{%= class_name %}']->hooks();
 
