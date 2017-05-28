@@ -24,26 +24,21 @@ exports.warnOn = '*';
 exports.template = function( grunt, init, done ) {
 	init.process( {}, [
 		// Prompt for these values.
-		init.prompt( 'title', 'WebDevStudios Plugin' ),
+		init.prompt( 'title', 'PluginEver Plugin' ),
 		{
 			name   : 'prefix',
 			message: 'PHP function prefix (alpha and underscore characters only)',
-			default: 'wpplugin'
+			default: 'plvr'
 		},
 		init.prompt( 'description', 'The best WordPress plugin ever made!' ),
-		init.prompt( 'homepage', 'http://webdevstudios.com' ),
-		init.prompt( 'author_name', 'WebDevStudios' ),
-		init.prompt( 'author_email', 'contact@webdevstudios.com' ),
-		init.prompt( 'author_url', 'http://webdevstudios.com' ),
+		init.prompt( 'homepage', 'https://www.pluginever.com' ),
+		init.prompt( 'author_name', 'PluginEver' ),
+		init.prompt( 'author_email', 'support@pluginever.com' ),
+		init.prompt( 'author_url', 'https://www.pluginever.com' ),
 		{
 			name: 'css_type',
 			message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
 			default: 'Sass'
-		},
-		{
-			name: 'autoloader',
-			message: 'Autoload: Do you want to add an autoloader for this project? Y/N',
-			default: 'Y'
 		},
 		{
 			name: 'wpcs',
