@@ -12,13 +12,13 @@ Once grunt-init is installed, place this template in your `~/.grunt-init/` direc
 ### Linux/Mac Users
 
 ```
-git clone https://github.com/sultann/grunt-wp-plugin.git ~/.grunt-init/wp-plugin
+git clone https://github.com/sultann/wp-plugin.git ~/.grunt-init/wp-plugin
 ```
 
 ### Windows Users
 
 ```
-git clone https://github.com/sultann/grunt-wp-plugin.git %USERPROFILE%/.grunt-init/wp-plugin
+git clone https://github.com/sultann/wp-plugin.git %USERPROFILE%/.grunt-init/wp-plugin
 ```
 
 ## Usage
