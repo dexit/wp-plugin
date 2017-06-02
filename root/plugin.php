@@ -30,47 +30,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-{% if (autoloader) { %}
-/**
- * Autoloads files with classes when needed
- * @since  0.1.0
- * @param  string $class_name Name of the class being requested
- */
-function {%= prefix %}_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) || false === stripos( $class_name, '{%= class_name %}_' ) ) {
-		return;
-	}
-
-	$filename = strtolower( str_ireplace(
-		array( '{%= class_name %}_', '_' ),
-		array( '', '-' ),
-		$class_name
-	) );
-
-	{%= class_name %}::include_file( $filename );
-}
-spl_autoload_register( '{%= prefix %}_autoload_classes' );
-{% } %}
 /**
  * Main initiation class
  */
 class {%= class_name %} {
 
 	const VERSION = '0.1.0';
-	{% if (!autoloader) { %}
-	protected static $url  = '';
-	protected static $path = '';
-	{% } %}
+	
 	/**
 	 * Sets up our plugin
 	 * @since  0.1.0
 	 */
 	public function __construct() {
-		{% if (!autoloader) { %}
-		// Useful variables
-		self::$url  = trailingslashit( plugin_dir_url( __FILE__ ) );
-		self::$path = trailingslashit( dirname( __FILE__ ) );
-		{% } %}
+	
+
 	}
 
 	public function hooks() {
@@ -114,7 +87,8 @@ class {%= class_name %} {
 	 * @return null
 	 */
 	public function admin_hooks() {
-	}{% if (autoloader) { %}
+
+	}
 
 	/**
 	 * Include a file from the includes directory
@@ -128,48 +102,9 @@ class {%= class_name %} {
 		}
 	}
 
-	/**
-	 * This plugin's directory
-	 * @since  0.1.0
-	 * @param  string $path (optional) appended path
-	 * @return string       Directory and path
-	 */
-	public static function dir( $path = '' ) {
-		static $dir;
-		$dir = $dir ? $dir : trailingslashit( dirname( __FILE__ ) );
-		return $dir . $path;
-	}
 
-	/**
-	 * This plugin's url
-	 * @since  0.1.0
-	 * @param  string $path (optional) appended path
-	 * @return string       URL and path
-	 */
-	public static function url( $path = '' ) {
-		static $url;
-		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
-		return $url . $path;
-	}{% } %}
 
-	/**
-	 * Magic getter for our object.
-	 *
-	 * @param string $field
-	 *
-	 * @throws Exception Throws an exception if the field is invalid.
-	 *
-	 * @return mixed
-	 */
-	public function __get( $field ) {
-		switch ( $field ) {
-			case 'url':
-			case 'path':
-				return self::$field;
-			default:
-				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
-		}
-	}
+
 
 }
 
