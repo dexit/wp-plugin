@@ -29,6 +29,8 @@ exports.template = function(grunt, init, done) {
             message: 'PHP function prefix (alpha and underscore characters only)',
             default: 'Pluginever'
         },
+        init.prompt('textdomain', 'plvr'),
+        init.prompt('constant_prefix', 'PLVR'),
         init.prompt('description', 'The best WordPress plugin ever made!'),
         init.prompt('homepage', 'http://pluginever.com'),
         init.prompt('author_name', 'PluginEver'),

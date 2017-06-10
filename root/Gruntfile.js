@@ -14,40 +14,42 @@ module.exports = function(grunt) {
 
     // Project configuration
     grunt.initConfig({
-        concat: {
-            options: {
-                stripBanners: true,
-                banner: bannerTemplate
-            },
+
+    pkg: grunt.file.readJSON('package.json'),
+
+    concat: {
+        options: {
+            stripBanners: true,
+            banner: bannerTemplate
+        },
             {%= js_safe_name %}: {
                 src: [
                     'assets/js/src/{%= wpfilename %}.js'
                 ],
-                dest: 'assets/js/{%= wpfilename %}.js'
+                    dest: 'assets/js/{%= wpfilename %}.js'
             }
         },
-
-    jshint: {
+       jshint: {
         all: [
             'Gruntfile.js',
             'assets/js/src/**/*.js',
             'assets/js/test/**/*.js'
         ],
-        options: {
+            options: {
             curly: true,
-            eqeqeq: true,
-            immed: true,
-            latedef: true,
-            newcap: true,
-            noarg: true,
-            sub: true,
-            unused: true,
-            undef: true,
-            boss: true,
-            eqnull: true,
-            globals: {
+                eqeqeq: true,
+                immed: true,
+                latedef: true,
+                newcap: true,
+                noarg: true,
+                sub: true,
+                unused: true,
+                undef: true,
+                boss: true,
+                eqnull: true,
+                globals: {
                 exports: true,
-                module: false
+                    module: false
             },
             predef: ['document', 'window']
         }
@@ -60,21 +62,18 @@ module.exports = function(grunt) {
             },
             options: {
                 banner: compactBannerTemplate,
-                mangle: {
+                    mangle: {
                     except: ['jQuery']
                 }
             }
         }
     },
-
-    test: {
+      test: {
         files: ['assets/js/test/**/*.js']
     },
 
-    {%=
-        if ('sass' === css_type) {%=
-        }
-        sass: {
+        {% if ('sass' === css_type) { %}
+        sass:   {
             all: {
                 files: {
                     'assets/css/{%= wpfilename %}.css': 'assets/css/sass/{%= wpfilename %}.scss'
@@ -82,12 +81,8 @@ module.exports = function(grunt) {
             }
         },
 
-        {%=
-        }
-        else
-        if ('less' === css_type) {%=
-        }
-        less: {
+        {% } else if ('less' === css_type) { %}
+        less:   {
             all: {
                 files: {
                     'assets/css/{%= wpfilename %}.css': 'assets/css/less/{%= wpfilename %}.less'
@@ -95,114 +90,99 @@ module.exports = function(grunt) {
             }
         },
 
-        {%=
-        } %}
-    cssmin: {
-        options: {
-            banner: bannerTemplate
-        },
-        minify: {
-            expand: true,
-            {%
-                if ('sass' === css_type || 'less' === css_type) {%
-                }
+        {% } %}
+        cssmin: {
+            options: {
+                banner: bannerTemplate
+            },
+            minify: {
+                expand: true,
+                {% if ('sass' === css_type || 'less' === css_type) { %}
                 cwd: 'assets/css/',
                 src: ['{%= wpfilename %}.css'],
-                {%
-                }
-                else {%
-                }
+                {% } else { %}
                 cwd: 'assets/css/src/',
                 src: ['{%= wpfilename %}.css'],
-                {%
-                } %
+                {% } %}
+                dest: 'assets/css/',
+                ext: '.min.css'
             }
-            dest: 'assets/css/',
-            ext: '.min.css'
-        }
-    },
+        },
 
-    watch: {
-        {%
-            if ('sass' === css_type) {%
-            }
+        watch:  {
+             options: {
+                livereload: true,
+            },
+            {% if ('sass' === css_type) { %}
             sass: {
                 files: ['assets/css/sass/*.scss'],
                 tasks: ['sass', 'cssmin'],
                 options: {
                     debounceDelay: 500
                 }
-            }, {%
-            }
-            else
-            if ('less' === css_type) {%
-            }
+            },
+            {% } else if ('less' === css_type) { %}
             less: {
                 files: ['assets/css/less/*.less'],
                 tasks: ['less', 'cssmin'],
                 options: {
                     debounceDelay: 500
                 }
-            }, {%
-            }
-            else {%
-            }
+            },
+            {% } else { %}
             styles: {
-                    files: ['assets/css/src/*.css'],
-                    tasks: ['cssmin'],
-                    options: {
-                        debounceDelay: 500
-                    }
-                }, {%
-                } %
-        }
-        scripts: {
-            files: ['assets/js/src/**/*.js', 'assets/js/vendor/**/*.js'],
-            tasks: ['jshint', 'concat', 'uglify'],
-            options: {
-                debounceDelay: 500
-            }
-        }
-    },
-
-
-    /**
-     * check WP Coding standards
-     * https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
-     */
-    phpcs: {
-        application: {
-            dir: [
-                '**/*.php',
-                '!**/node_modules/**'
-            ]
-        },
-        options: {
-            bin: '~/phpcs/scripts/phpcs',
-            standard: 'WordPress'
-        }
-    },
-    makepot: {
-        target: {
-            options: {
-                exclude: ['build/.*', 'node_modules/*', 'assets/*'],
-                domainPath: '/i18n/languages/', // Where to save the POT file.
-                potFilename: '{%= wpfilename %}.pot', // Name of the POT file.
-                type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
-                potHeaders: {
-                    'report-msgid-bugs-to': 'http://pluginever.com/support/',
-                    'language-team': 'LANGUAGE <support@pluginever.com>'
+                files: ['assets/css/src/*.css'],
+                tasks: ['cssmin'],
+                options: {
+                    debounceDelay: 500
+                }
+            },
+            {% } %}
+            scripts: {
+                files: ['assets/js/src/**/*.js', 'assets/js/vendor/**/*.js'],
+                tasks: ['jshint', 'concat', 'uglify'],
+                options: {
+                    debounceDelay: 500
                 }
             }
-        }
-    },
-    // Clean up build directory
-    clean: {
-        main: ['build/']
-    },
+        },
 
-    // Copy the plugin into the build directory
-    copy: {
+        /**
+         * check WP Coding standards
+         * https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+         */
+        phpcs: {
+            application: {
+                dir: [
+                    '**/*.php',
+                    '!**/node_modules/**'
+                ]
+            },
+            options: {
+                bin: '~/phpcs/scripts/phpcs',
+                standard: 'WordPress'
+            }
+        },
+           // Generate POT files.
+        makepot: {
+            target: {
+                options: {
+                    exclude: ['build/.*', 'node_modules/*', 'assets/*'],
+                        domainPath: '/i18n/languages/', // Where to save the POT file.
+                        potFilename: '{%= wpfilename %}.pot', // Name of the POT file.
+                        type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
+                        potHeaders: {
+                        'report-msgid-bugs-to': 'http://pluginever.com/support/',
+                            'language-team': 'LANGUAGE <support@pluginever.com>'
+                    }
+                }
+            }
+        },
+            // Clean up build directory
+        clean: {
+            main: ['build/']
+        },
+          copy: {
         main: {
             src: [
                 '**',
@@ -235,68 +215,56 @@ module.exports = function(grunt) {
                 '!.tmp',
                 '!assets/src/**',
             ],
-            dest: 'build/'
+                dest: 'build/'
         }
     },
-
-    //Compress build directory into <name>.zip and <name>-<version>.zip
-    compress: {
+      compress: {
         main: {
             options: {
                 mode: 'zip',
-                archive: './build/{%= name %}' + pkg.version + '.zip'
+                    archive: './build/{%= name %}' + pkg.version + '.zip'
             },
             expand: true,
-            cwd: 'build/',
-            src: ['**/*'],
-            dest: '{%= name %}'
+                cwd: 'build/',
+                src: ['**/*'],
+                dest: '{%= name %}'
         }
-    }
+    }   
 
-    });
 
-    // Load other tasks
+
+});
+
+// Load other tasks
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks( 'grunt-wp-i18n' );
     grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.loadNpmTasks('grunt-notify');
-    grunt.loadNpmTasks('grunt-wp-i18n');
-
-    {% if ('sass' === css_type) {%
-        }
-        grunt.loadNpmTasks('grunt-contrib-sass'); {%
-        } else
-        if ('less' === css_type) {%
-        }
-        grunt.loadNpmTasks('grunt-contrib-less'); {%
-        } %
-    }
-    grunt.loadNpmTasks('grunt-contrib-watch'); {%
-        if (wpcs) {%
-        }
-        grunt.loadNpmTasks('grunt-phpcs'); {%
-        } %
-    }
+    {% if ('sass' === css_type) { %}
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    {% } else if ('less' === css_type) { %}
+    grunt.loadNpmTasks('grunt-contrib-less');
+    {% } %}
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    {% if (wpcs) { %}
+    grunt.loadNpmTasks('grunt-phpcs');
+    {% } %}
 
     // Default task.
-    {%if ('sass' === css_type) {%
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin']); {%
-        } else
-        if ('less' === css_type) {%
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']); {%
-        } else {%
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin']); {%
-        } %
-    }
+    {% if ('sass' === css_type) { %}
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
+    {% } else if ('less' === css_type) { %}
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'less', 'cssmin'] );
+    {% } else { %}
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'cssmin'] );
+    {% } %}
+   
 
-    grunt.registerTask('release', ['makepot']);
+    grunt.registerTask('release', ['makepot', 'zip']);
 
     grunt.registerTask('zip', ['clean', 'copy', 'compress']);
 
