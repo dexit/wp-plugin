@@ -48,18 +48,20 @@ exports.template = function(grunt, init, done) {
         props.keywords = [];
         props.version = '0.1.0';
         props.devDependencies = {
-            'grunt': '~0.4.1',
-            'grunt-contrib-concat': '~0.1.2',
-            'grunt-contrib-uglify': '~0.1.1',
-            'grunt-contrib-cssmin': '~0.6.0',
-            'grunt-contrib-jshint': '~0.1.1',
-            'grunt-contrib-nodeunit': '~0.1.2',
-            'grunt-contrib-watch': '~0.2.0',
-            'grunt-phpcs': '~0.2.3',
-            'grunt-contrib-clean': '^1.1.0',
-            'grunt-contrib-compress': '^1.4.1',
-            'grunt-contrib-copy': '^1.0.0',
+            "grunt": "^1.0.1",
+            "grunt-contrib-clean": "^1.1.0",
+            "grunt-contrib-compress": "^1.4.3",
+            "grunt-contrib-concat": "^1.0.1",
+            "grunt-contrib-copy": "^1.0.0",
+            "grunt-contrib-cssmin": "^2.2.0",
+            "grunt-contrib-jshint": "^1.1.0",
+            "grunt-contrib-nodeunit": "^1.0.0",
+            "grunt-contrib-sass": "^1.0.0",
+            "grunt-contrib-uglify": "^3.0.1",
+            "grunt-contrib-watch": "^1.0.0",
+            "grunt-livereload": "^0.1.3",
             "grunt-notify": "^0.4.5",
+            "grunt-phpcs": "^0.4.0",
             "grunt-wp-i18n": "^1.0.0",
             "jshint-stylish": "^2.2.1"
         };
