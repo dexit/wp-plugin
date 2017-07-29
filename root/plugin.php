@@ -8,7 +8,7 @@
  * Author URI:  {%= author_url %}
  * Donate link: {%= homepage %}
  * License:     GPLv2+
- * Text Domain: {%= prefix %}
+ * Text Domain: {%= text_domain %}
  * Domain Path: /languages
  */
 
@@ -34,45 +34,72 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 /**
  * Main initiation class
+ *
+ * @since 1.0.0
  */
-include( dirname( __FILE__ ) . '/lib/requirements-check.php' );
-
 class {%= class_name %} {
 
+    /**
+     * Add-on Version
+     *
+     * @since 1.0.0
+     * @var  string
+     */
 	public $version = '1.0.0';
 
-	public $dependency_plugins = [];
-
-	
 	/**
-	 * Sets up our plugin
-	 * @since  0.1.0
+	 * Initializes the class
+	 *
+	 * Checks for an existing instance
+	 * and if it does't find one, creates it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return object Class instance
+	 */
+	public static function init() {
+		static $instance = false;
+
+		if ( ! $instance ) {
+			$instance = new self();
+		}
+
+		return $instance;
+	}
+
+	/**
+	 * Constructor for the class
+	 *
+	 * Sets up all the appropriate hooks and actions
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
 	public function __construct() {
-
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-		add_action( 'admin_init', array( $this, 'admin_hooks' ) );
+		// Localize our plugin
 		add_action( 'init', [ $this, 'localization_setup' ] );
+
+		// on activate plugin register hook
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+
+		// on deactivate plugin register hook
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+
+		// Define constants
 		$this->define_constants();
+
+		// Include required files
 		$this->includes();
-		add_action('wp_enqueue_scripts', [$this, 'load_assets']);
-	}
 
-	/**
-	 * Activate the plugin
-	 */
-	function activate() {
-		// Make sure any rewrite functionality has been loaded
-		flush_rewrite_rules();
-	}
+		// Initialize the action hooks
+		$this->init_actions();
 
-	/**
-	 * Deactivate the plugin
-	 * Uninstall routines should be in uninstall.php
-	 */
-	function deactivate() {
+		// instantiate classes
+		$this->instantiate();
 
+		// Loaded action
+		do_action( '{%= prefix %}' );
 	}
 
 	/**
@@ -84,33 +111,34 @@ class {%= class_name %} {
 	 */
 	public function localization_setup() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
-		load_textdomain( '{%= prefix %}', WP_LANG_DIR . '/{%= prefix %}/{%= prefix %}-' . $locale . '.mo' );
-		load_plugin_textdomain( '{%= prefix %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_textdomain( '{%= text_domain %}', WP_LANG_DIR . '/{%= text_domain %}/{%= text_domain %}-' . $locale . '.mo' );
+		load_plugin_textdomain( '{%= text_domain %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
-
-
 	/**
-	 * Hooks for the Admin
-	 * @since  0.1.0
-	 * @return null
+	 * Executes during plugin activation
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
-	public function admin_hooks() {
-
+	function activate() {
+		flush_rewrite_rules();
 	}
 
 	/**
-	 * Include a file from the includes directory
-	 * @since  0.1.0
-	 * @param  string $filename Name of the file to be included
+	 * Executes during plugin deactivation
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
-	public function includes( ) {
-		require {%= constant_prefix %}_INCLUDES .'/functions.php';
+	function deactivate() {
+
 	}
 
-
 	/**
-	 * Define Add-on constants
+	 * Define constants
 	 *
 	 * @since 1.0.0
 	 *
@@ -127,6 +155,27 @@ class {%= class_name %} {
 		define( '{%= constant_prefix %}_TEMPLATES_DIR', {%= constant_prefix %}_PATH . '/templates' );
 	}
 
+	/**
+	 * Include required files
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	private function includes( ) {
+		require {%= constant_prefix %}_INCLUDES .'/functions.php';
+	}
+
+	/**
+	 * Instantiate classes
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	private function instantiate() {
+
+	}
 	
 	/**
 	 * Add all the assets required by the plugin
@@ -143,26 +192,17 @@ class {%= class_name %} {
 		wp_enqueue_script('{%= wpfilename %}');
 	}
 
-
-
-	/**
-	 * Display an error message if WP ERP is not active
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function admin_notice($type='error', $message) {
-		printf(
-			'%s'. __( $message, '{%= prefix %}' ) . '%s',
-			'<div class="message '.$type.'"><p>',
-			'</p></div>'
-		);
+	public static function log($message){
+		if( WP_DEBUG !== true ) return;
+		if (is_array($message) || is_object($message)) {
+			$message = print_r($message, true);
+		}
+		$debug_file = WP_CONTENT_DIR . '/custom-debug.log';
+		if (!file_exists($debug_file)) {
+			@touch($debug_file);
+		}
+		return error_log(date("Y-m-d\tH:i:s") . "\t\t" . strip_tags($message) . "\n", 3, $debug_file);
 	}
-
-
-
-
 
 }
 
