@@ -1,11 +1,3 @@
-/**
- * grunt-wp-plugin
- * https://github.com/10up/grunt-wp-plugin
- *
- * Copyright (c) 2013 Eric Mann, 10up
- * Licensed under the MIT License
- */
-
 'use strict';
 
 // Basic template description
@@ -29,7 +21,6 @@ exports.template = function(grunt, init, done) {
             message: 'PHP function prefix (alpha and underscore characters only)',
             default: 'Pluginever'
         },
-        init.prompt('textdomain', 'plvr'),
         init.prompt('constant_prefix', 'PLVR'),
         init.prompt('description', 'The best WordPress plugin ever made!'),
         init.prompt('homepage', 'http://pluginever.com'),
@@ -82,7 +73,7 @@ exports.template = function(grunt, init, done) {
         props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
         props.js_safe_name_caps = props.js_safe_name.toUpperCase();
         props.wpfilename = props.js_safe_name.replace(/_/g, '-').toLowerCase();
-
+        props.text_domain = props.name.replace('/[^a-z_]/i', '').toLowerCase().replace(/-/g, '-');
         // Files to copy and process
         var files = init.filesToCopy(props);
 
@@ -106,7 +97,7 @@ exports.template = function(grunt, init, done) {
                 delete files['assets/css/less/' + props.wpfilename + '.less'];
                 delete files['assets/css/src/' + props.wpfilename + '.css'];
 
-                props.devDependencies["grunt-contrib-sass"] = "~0.2.2";
+                props.devDependencies["grunt-contrib-sass"] = "^1.0.0";
                 props.css_type = 'sass';
                 break;
         }

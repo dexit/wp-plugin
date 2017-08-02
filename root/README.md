@@ -1,6 +1,5 @@
 # {%= title %} #
-**Contributors:**      WebDevStudios  
-**Donate link:**       {%= donate_link %}  
+**Contributors:**      {%= author_name %}  
 **Tags:**  
 **Requires at least:** 3.6.0  
 **Tested up to:**      3.6.0  

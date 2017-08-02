@@ -1,5 +1,5 @@
 === {%= title %} ===
-Contributors:      WebDevStudios  
+Contributors:      {%= author_name %}  
 Donate link:       {%= donate_link %}  
 Tags:  
 Requires at least: 3.6.0  

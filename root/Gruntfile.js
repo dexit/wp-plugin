@@ -24,35 +24,21 @@ module.exports = function(grunt) {
         },
             {%= js_safe_name %}: {
                 src: [
-                    'assets/js/src/{%= wpfilename %}.js'
+                    'assets/js/src/{%= wpfilename %}.js',
+                    'assets/js/vendor/*.js',
                 ],
                     dest: 'assets/js/{%= wpfilename %}.js'
             }
         },
-       jshint: {
-        all: [
-            'Gruntfile.js',
-            'assets/js/src/**/*.js',
-            'assets/js/test/**/*.js'
-        ],
-            options: {
-            curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                unused: true,
-                undef: true,
-                boss: true,
-                eqnull: true,
-                globals: {
-                exports: true,
-                    module: false
-            },
-            predef: ['document', 'window']
-        }
+    // jshint
+    jshint: {
+        options: {
+            jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
+        },
+        main: [
+            'assets/js/src/*.js',
+        ]
     },
 
     uglify: {
@@ -62,16 +48,13 @@ module.exports = function(grunt) {
             },
             options: {
                 banner: compactBannerTemplate,
-                    mangle: {
-                    except: ['jQuery']
-                }
+                mangle: false
+            },
+            compress: {
+                drop_console: true
             }
         }
     },
-      test: {
-        files: ['assets/js/test/**/*.js']
-    },
-
         {% if ('sass' === css_type) { %}
         sass:   {
             all: {
@@ -106,6 +89,25 @@ module.exports = function(grunt) {
                 {% } %}
                 dest: 'assets/css/',
                 ext: '.min.css'
+            }
+        },
+        imagemin: {
+            static: {
+                options: {
+                    optimizationLevel: 3,
+                        svgoPlugins: [{removeViewBox: false}],
+                        use: [] // Example plugin usage
+                },
+                files: {
+                }
+            },
+            dynamic: {
+                files: [{
+                    expand: true,
+                    cwd: 'assets/images/src/',
+                    src: ['**/*.{png,jpg,gif,svg}'],
+                    dest: 'assets/images/'
+                }]
             }
         },
 
@@ -229,7 +231,12 @@ module.exports = function(grunt) {
                 src: ['**/*'],
                 dest: '{%= name %}'
         }
-    }   
+    },
+    server: {
+        options: {
+            message: 'Server is ready!'
+        }
+    }
 
 
 
@@ -240,6 +247,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks( 'grunt-wp-i18n' );
@@ -253,20 +262,16 @@ module.exports = function(grunt) {
     {% if (wpcs) { %}
     grunt.loadNpmTasks('grunt-phpcs');
     {% } %}
-
     // Default task.
     {% if ('sass' === css_type) { %}
-    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin', 'imagemin', 'notify:server'] );
     {% } else if ('less' === css_type) { %}
-    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'less', 'cssmin'] );
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'less', 'cssmin', 'imagemin'] );
     {% } else { %}
-    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'cssmin'] );
+    grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'cssmin', 'imagemin', 'notify:server'] );
     {% } %}
-   
 
     grunt.registerTask('release', ['makepot', 'zip']);
-
     grunt.registerTask('zip', ['clean', 'copy', 'compress']);
-
     grunt.util.linefeed = '\n';
 };
