@@ -81,7 +81,7 @@ class {%= class_name %} {
 		add_action( 'init', [ $this, 'localization_setup' ] );
 
 		// on activate plugin register hook
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_activation_hook( __FILE__, array( $this, 'install' ) );
 
 		// on deactivate plugin register hook
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
@@ -122,8 +122,9 @@ class {%= class_name %} {
 	 *
 	 * @return void
 	 */
-	function activate() {
-		flush_rewrite_rules();
+	function install() {
+		
+
 	}
 
 	/**
@@ -167,6 +168,17 @@ class {%= class_name %} {
 	}
 
 	/**
+	 * Init Hooks
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	private function init_actions() {
+
+	}
+
+	/**
 	 * Instantiate classes
 	 *
 	 * @since 1.0.0
@@ -192,6 +204,16 @@ class {%= class_name %} {
 		wp_enqueue_script('{%= wpfilename %}');
 	}
 
+
+	/**
+	 * Logger for the plugin
+	 *
+	 * @since	1.0.0
+	 *
+	 * @param  $message
+	 *
+	 * @return  string
+	 */
 	public static function log($message){
 		if( WP_DEBUG !== true ) return;
 		if (is_array($message) || is_object($message)) {

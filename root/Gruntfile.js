@@ -24,8 +24,8 @@ module.exports = function(grunt) {
         },
             {%= js_safe_name %}: {
                 src: [
-                    'assets/js/src/{%= wpfilename %}.js',
                     'assets/js/vendor/*.js',
+                    'assets/js/src/{%= wpfilename %}.js',
                 ],
                     dest: 'assets/js/{%= wpfilename %}.js'
             }
@@ -224,7 +224,7 @@ module.exports = function(grunt) {
         main: {
             options: {
                 mode: 'zip',
-                    archive: './build/{%= name %}' + pkg.version + '.zip'
+                    archive: './build/{%= name %}-' + pkg.version + '.zip'
             },
             expand: true,
                 cwd: 'build/',

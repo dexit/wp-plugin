@@ -22,6 +22,7 @@ exports.template = function(grunt, init, done) {
             default: 'Pluginever'
         },
         init.prompt('constant_prefix', 'PLVR'),
+        init.prompt('is_woocommerce', 'no'),
         init.prompt('description', 'The best WordPress plugin ever made!'),
         init.prompt('homepage', 'http://pluginever.com'),
         init.prompt('author_name', 'PluginEver'),
@@ -37,7 +38,7 @@ exports.template = function(grunt, init, done) {
         }
     ], function(err, props) {
         props.keywords = [];
-        props.version = '0.1.0';
+        props.version = '1.0.0';
         props.devDependencies = {
             "grunt": "^1.0.1",
             "grunt-contrib-clean": "^1.1.0",
@@ -45,6 +46,7 @@ exports.template = function(grunt, init, done) {
             "grunt-contrib-concat": "^1.0.1",
             "grunt-contrib-copy": "^1.0.0",
             "grunt-contrib-cssmin": "^2.2.0",
+            "grunt-contrib-imagemin": "^2.0.1",
             "grunt-contrib-jshint": "^1.1.0",
             "grunt-contrib-nodeunit": "^1.0.0",
             "grunt-contrib-sass": "^1.0.0",
@@ -59,6 +61,8 @@ exports.template = function(grunt, init, done) {
 
         // Sanitize names where we need to for PHP/JS
         props.name = props.title.replace(/\s+/g, '-').toLowerCase();
+
+        
         // Class name
         props.class_name = props.title.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -74,6 +78,19 @@ exports.template = function(grunt, init, done) {
         props.js_safe_name_caps = props.js_safe_name.toUpperCase();
         props.wpfilename = props.js_safe_name.replace(/_/g, '-').toLowerCase();
         props.text_domain = props.name.replace('/[^a-z_]/i', '').toLowerCase().replace(/-/g, '-');
+
+        props.class_name = replaceString(props.class_name, 'Plvr', 'PLVR');
+
+        //if woocommerce
+        if( props.is_woocommerce === 'yes' ){
+            props.class_name = replaceString(props.class_name, 'Woocommerce', 'WC');
+            props.prefix = replaceString(props.prefix, 'woocommerce', 'wc');
+            props.js_safe_name = replaceString(props.js_safe_name, 'woocommerce', 'wc');
+            props.wpfilename = replaceString(props.wpfilename, 'woocommerce', 'wc');
+            props.text_domain = replaceString(props.text_domain, 'woocommerce', 'wc');
+
+        }
+
         // Files to copy and process
         var files = init.filesToCopy(props);
 
@@ -118,5 +135,15 @@ exports.template = function(grunt, init, done) {
 
         // Done!
         done();
+
+
+
+        function replaceString($string, $search, $replace){
+            console.log('search', $search);
+            console.log('replace', $replace);
+            var result = $string.replace($search, $replace);
+            console.log('result', result);
+           return  result
+        }
     });
 };
