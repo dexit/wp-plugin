@@ -175,7 +175,7 @@ class {%= class_name %} {
 	 * @return void
 	 */
 	private function init_actions() {
-
+		add_action( 'wp_enqueue_scripts', array( $this, 'load_assets') );
 	}
 
 	/**
@@ -197,8 +197,9 @@ class {%= class_name %} {
 	 * @return void
 	 */
 	function load_assets(){
-		wp_register_style('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/css/{%= wpfilename %}.css', [], date('i'));
-		wp_register_script('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/js/{%= wpfilename %}.js', ['jquery'], date('i'), true);
+		$suffix = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
+		wp_register_style('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/css/{%= wpfilename %}{$suffix}.css', [], date('i'));
+		wp_register_script('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/js/{%= wpfilename %}{$suffix}.js', ['jquery'], date('i'), true);
 		wp_localize_script('{%= wpfilename %}', 'jsobject', ['ajaxurl' => admin_url( 'admin-ajax.php' )]);
 		wp_enqueue_style('{%= wpfilename %}');
 		wp_enqueue_script('{%= wpfilename %}');
