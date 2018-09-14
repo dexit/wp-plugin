@@ -13,119 +13,79 @@ exports.after = '';
 exports.warnOn = '*';
 
 // The actual init template
-exports.template = function(grunt, init, done) {
+exports.template = function (grunt, init, done) {
     init.process({}, [
-        // Prompt for these values.
-        init.prompt('title', 'Pluginever Plugin'), {
-            name: 'prefix',
-            message: 'PHP function prefix (alpha and underscore characters only)',
-            default: 'Pluginever'
-        },
-        init.prompt('constant_prefix', 'PLVR'),
-        init.prompt('is_woocommerce', 'no'),
-        init.prompt('description', 'The best WordPress plugin ever made!'),
-        init.prompt('homepage', 'http://pluginever.com'),
-        init.prompt('author_name', 'PluginEver'),
+        init.prompt('title', 'WP Plugin'),
+        init.prompt('description', 'The Best WordPress Plugin ever made!'),
+        init.prompt('homepage', 'https://www.pluginever.com'),
+        init.prompt('author_name', 'pluginever'),
         init.prompt('author_email', 'support@pluginever.com'),
-        init.prompt('author_url', 'http://pluginever.com'), {
-            name: 'css_type',
-            message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
-            default: 'Sass'
-        },{
-            name: 'wpcs',
-            message: 'WordPress Coding Standards grunt task: You need to have PHP Code Sniffer installed. Y/N',
-            default: 'Y'
-        }
-    ], function(err, props) {
+        init.prompt('author_url', 'https://www.pluginever.com'),
+    ], function (err, props) {
         props.keywords = [];
         props.version = '1.0.0';
-        props.devDependencies = {
-            "grunt": "^1.0.1",
-            "grunt-contrib-clean": "^1.1.0",
-            "grunt-contrib-compress": "^1.4.3",
-            "grunt-contrib-concat": "^1.0.1",
-            "grunt-contrib-copy": "^1.0.0",
-            "grunt-contrib-cssmin": "^2.2.0",
-            "grunt-contrib-imagemin": "^2.0.1",
-            "grunt-contrib-jshint": "^1.1.0",
-            "grunt-contrib-nodeunit": "^1.0.0",
-            "grunt-contrib-sass": "^1.0.0",
-            "grunt-contrib-uglify": "^3.0.1",
-            "grunt-contrib-watch": "^1.0.0",
-            "grunt-livereload": "^0.1.3",
-            "grunt-notify": "^0.4.5",
-            "grunt-phpcs": "^0.4.0",
-            "grunt-wp-i18n": "^1.0.0",
-            "jshint-stylish": "^2.2.1"
+        //sanitize the plugin name
+        var plugin_capitalized_name = props.title
+            .replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1)
+                    .toLowerCase();
+            })
+            .replace(/^wp/gi, 'WP');
+
+        var plugin_slug = props.title.replace(/\s+/g, '-').toLowerCase();
+        var constant_prefix = 'WP'.concat(plugin_capitalized_name.replace(/^WP/gi, '').match(/\b(\w)/g).join('')); //includeing WP
+        var function_prefix = plugin_slug.replace(/^wp?-/g, '').replace(/\-/g, '_'); //excluding wp
+
+        props.name = plugin_slug;
+        props.title = plugin_capitalized_name;
+        props.slug = plugin_slug;
+        props.text_domain = plugin_slug;
+        props.constant_prefix = constant_prefix;
+        props.function_prefix = function_prefix;
+        props.js_safe_name = plugin_slug.replace(/-/g, '_');
+        props.class_name = plugin_capitalized_name.replace(/^wp/gi, '').replace(/\s/g, '');
+        props.namespace = props.class_name.replace(/^wp/gi, '').replace(/\s/g, '');
+        props.wpfilename = plugin_slug;
+        props.js_object = constant_prefix.toLocaleLowerCase();
+        props.scripts = {
+            "build": "grunt",
+            "build-watch": "grunt watch"
         };
-
-        // Sanitize names where we need to for PHP/JS
-        props.name = props.title.replace(/\s+/g, '-').toLowerCase();
-
-        
-        // Class name
-        props.class_name = props.title.replace(/\w\S*/g, function(txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }).replace(/\s+/g, '_');
-        // Development prefix (i.e. to prefix PHP function names, variables)
-        props.prefix = props.name.replace('/[^a-z_]/i', '').toLowerCase().replace(/-/g, '_');
-        // Development prefix in all caps (e.g. for constants)
-        props.prefix_caps = props.prefix.toUpperCase();
-        // An additional value, safe to use as a JavaScript identifier.
-        props.js_safe_name = props.name.replace(/[\W_]+/g, '_').replace(/^(\d)/, '_$1');
-        // An additional value that won't conflict with NodeUnit unit tests.
-        props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
-        props.js_safe_name_caps = props.js_safe_name.toUpperCase();
-        props.wpfilename = props.js_safe_name.replace(/_/g, '-').toLowerCase();
-        props.text_domain = props.name.replace('/[^a-z_]/i', '').toLowerCase().replace(/-/g, '-');
-
-        props.class_name = replaceString(props.class_name, 'Plvr', 'PLVR');
-
-        //if woocommerce
-        if( props.is_woocommerce === 'yes' ){
-            props.class_name = replaceString(props.class_name, 'Woocommerce', 'WC');
-            props.prefix = replaceString(props.prefix, 'woocommerce', 'wc');
-            props.js_safe_name = replaceString(props.js_safe_name, 'woocommerce', 'wc');
-            props.wpfilename = replaceString(props.wpfilename, 'woocommerce', 'wc');
-            props.text_domain = replaceString(props.text_domain, 'woocommerce', 'wc');
-
-        }
+        props.devDependencies = {
+            "autoprefixer": "~8.6.2",
+            "babel": "^6.5.2",
+            "babel-cli": "^6.14.0",
+            "babel-eslint": "^8.2.3",
+            "babel-plugin-add-module-exports": "^0.2.1",
+            "babel-preset-es2015": "^6.14.0",
+            "babel-preset-stage-2": "^6.13.0",
+            "config": "^1.24.0",
+            "cross-env": "^5.1.6",
+            "grunt": "^1.0.3",
+            "grunt-checktextdomain": "~1.0.1",
+            "grunt-contrib-clean": "~1.1.0",
+            "grunt-contrib-compress": "^1.4.3",
+            "grunt-contrib-concat": "~1.0.1",
+            "grunt-contrib-copy": "^1.0.0",
+            "grunt-contrib-cssmin": "~2.2.1",
+            "grunt-contrib-jshint": "~1.1.0",
+            "grunt-contrib-uglify": "~3.3.0",
+            "grunt-contrib-watch": "^1.1.0",
+            "grunt-phpcs": "~0.4.0",
+            "grunt-postcss": "~0.9.0",
+            "grunt-prompt": "^1.3.3",
+            "grunt-sass": "~2.1.0",
+            "grunt-stylelint": "~0.10.0",
+            "grunt-wp-i18n": "~1.0.1",
+            "stylelint": "~9.2.1"
+        };
+        props.engines = {
+            "node": ">=8.9.3",
+            "npm": ">=5.5.1"
+        };
 
         // Files to copy and process
         var files = init.filesToCopy(props);
-
-        switch (props.css_type.toLowerCase()[0]) {
-            case 'l':
-                delete files['assets/css/sass/' + props.wpfilename + '.scss'];
-                delete files['assets/css/src/' + props.wpfilename + '.css'];
-
-                props.devDependencies["grunt-contrib-less"] = "~0.5.0";
-                props.css_type = 'less';
-                break;
-            case 'n':
-            case undefined:
-                delete files['assets/css/less/' + props.wpfilename + '.less'];
-                delete files['assets/css/sass/' + props.wpfilename + '.scss'];
-
-                props.css_type = 'none';
-                break;
-                // SASS is the default
-            default:
-                delete files['assets/css/less/' + props.wpfilename + '.less'];
-                delete files['assets/css/src/' + props.wpfilename + '.css'];
-
-                props.devDependencies["grunt-contrib-sass"] = "^1.0.0";
-                props.css_type = 'sass';
-                break;
-        }
-
-        // var autoloader = props.autoloader.toLowerCase()[0];
-        // props.autoloader = 'y' === autoloader ? true : false;
-
-        var wpcs = props.wpcs.toLowerCase()[0];
-        props.wpcs = 'y' === wpcs ? true : false;
-
-        console.log(files);
 
         // Actually copy and process files
         init.copyAndProcess(files, props);
@@ -135,15 +95,5 @@ exports.template = function(grunt, init, done) {
 
         // Done!
         done();
-
-
-
-        function replaceString($string, $search, $replace){
-            console.log('search', $search);
-            console.log('replace', $replace);
-            var result = $string.replace($search, $replace);
-            console.log('result', result);
-           return  result
-        }
     });
 };

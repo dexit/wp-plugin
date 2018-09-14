@@ -3,13 +3,13 @@
  * Plugin Name: {%= title %}
  * Plugin URI:  {%= homepage %}
  * Description: {%= description %}
- * Version:     0.1.0
+ * Version:     1.0.0
  * Author:      {%= author_name %}
  * Author URI:  {%= author_url %}
  * Donate link: {%= homepage %}
  * License:     GPLv2+
  * Text Domain: {%= text_domain %}
- * Domain Path: /languages
+ * Domain Path: /i18n/languages/
  */
 
 /**
@@ -37,205 +37,259 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @since 1.0.0
  */
-class {%= class_name %} {
-
-    /**
-     * Add-on Version
-     *
-     * @since 1.0.0
-     * @var  string
-     */
-	public $version = '1.0.0';
-
-	/**
-	 * Initializes the class
-	 *
-	 * Checks for an existing instance
-	 * and if it does't find one, creates it.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return object Class instance
-	 */
-	public static function init() {
-		static $instance = false;
-
-		if ( ! $instance ) {
-			$instance = new self();
-		}
-
-		return $instance;
-	}
-
-	/**
-	 * Constructor for the class
-	 *
-	 * Sets up all the appropriate hooks and actions
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		// Localize our plugin
-		add_action( 'init', [ $this, 'localization_setup' ] );
-
-		// on activate plugin register hook
-		register_activation_hook( __FILE__, array( $this, 'install' ) );
-
-		// on deactivate plugin register hook
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-
-		// Define constants
-		$this->define_constants();
-
-		// Include required files
-		$this->includes();
-
-		// Initialize the action hooks
-		$this->init_actions();
-
-		// instantiate classes
-		$this->instantiate();
-
-		// Loaded action
-		do_action( '{%= prefix %}' );
-	}
-
-	/**
-	 * Initialize plugin for localization
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function localization_setup() {
-		$locale = apply_filters( 'plugin_locale', get_locale(), '{%= prefix %}' );
-		load_textdomain( '{%= text_domain %}', WP_LANG_DIR . '/{%= text_domain %}/{%= text_domain %}-' . $locale . '.mo' );
-		load_plugin_textdomain( '{%= text_domain %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-	}
-
-	/**
-	 * Executes during plugin activation
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	function install() {
-		
-
-	}
-
-	/**
-	 * Executes during plugin deactivation
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	function deactivate() {
-
-	}
-
-	/**
-	 * Define constants
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	private function define_constants() {
-		define( '{%= constant_prefix %}_VERSION', $this->version );
-		define( '{%= constant_prefix %}_FILE', __FILE__ );
-		define( '{%= constant_prefix %}_PATH', dirname( {%= constant_prefix %}_FILE ) );
-		define( '{%= constant_prefix %}_INCLUDES', {%= constant_prefix %}_PATH . '/includes' );
-		define( '{%= constant_prefix %}_URL', plugins_url( '', {%= constant_prefix %}_FILE ) );
-		define( '{%= constant_prefix %}_ASSETS', {%= constant_prefix %}_URL . '/assets' );
-		define( '{%= constant_prefix %}_VIEWS', {%= constant_prefix %}_PATH . '/views' );
-		define( '{%= constant_prefix %}_TEMPLATES_DIR', {%= constant_prefix %}_PATH . '/templates' );
-	}
-
-	/**
-	 * Include required files
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	private function includes( ) {
-		require {%= constant_prefix %}_INCLUDES .'/functions.php';
-	}
-
-	/**
-	 * Init Hooks
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	private function init_actions() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'load_assets') );
-	}
-
-	/**
-	 * Instantiate classes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	private function instantiate() {
-
-	}
-	
-	/**
-	 * Add all the assets required by the plugin
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	function load_assets(){
-		$suffix = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
-		wp_register_style('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/css/{%= wpfilename %}{$suffix}.css', [], date('i'));
-		wp_register_script('{%= wpfilename %}', {%= constant_prefix %}_ASSETS.'/js/{%= wpfilename %}{$suffix}.js', ['jquery'], date('i'), true);
-		wp_localize_script('{%= wpfilename %}', 'jsobject', ['ajaxurl' => admin_url( 'admin-ajax.php' )]);
-		wp_enqueue_style('{%= wpfilename %}');
-		wp_enqueue_script('{%= wpfilename %}');
-	}
-
-
-	/**
-	 * Logger for the plugin
-	 *
-	 * @since	1.0.0
-	 *
-	 * @param  $message
-	 *
-	 * @return  string
-	 */
-	public static function log($message){
-		if( WP_DEBUG !== true ) return;
-		if (is_array($message) || is_object($message)) {
-			$message = print_r($message, true);
-		}
-		$debug_file = WP_CONTENT_DIR . '/custom-debug.log';
-		if (!file_exists($debug_file)) {
-			@touch($debug_file);
-		}
-		return error_log(date("Y-m-d\tH:i:s") . "\t\t" . strip_tags($message) . "\n", 3, $debug_file);
-	}
-
-}
-
-// init our class
-$GLOBALS['{%= class_name %}'] = new {%= class_name %}();
 
 /**
- * Grab the ${%= class_name %} object and return it
+ * Main {%= class_name %} Class.
+ *
+ * @class {%= class_name %}
  */
-function {%= prefix %}() {
-	global ${%= class_name %};
-	return ${%= class_name %};
+final class {%= class_name %} {
+    /**
+     * {%= class_name %} version.
+     *
+     * @var string
+     */
+    public $version = '1.0.0';
+
+    /**
+     * Minimum PHP version required
+     *
+     * @var string
+     */
+    private $min_php = '5.6.0';
+
+    /**
+     * The single instance of the class.
+     *
+     * @var {%= class_name %}
+     * @since 1.0.0
+     */
+    protected static $instance = null;
+
+
+    /**
+     * Holds various class instances
+     *
+     * @var array
+     */
+    private $container = array();
+
+    /**
+     * Main {%= class_name %} Instance.
+     *
+     * Ensures only one instance of {%= class_name %} is loaded or can be loaded.
+     *
+     * @since 1.0.0
+     * @static
+     * @return {%= class_name %} - Main instance.
+     */
+    public static function instance() {
+        if ( is_null( self::$instance ) ) {
+            self::$instance = new self();
+            self::$instance->setup();
+        }
+
+        return self::$instance;
+    }
+
+    /**
+     * Cloning is forbidden.
+     *
+     * @since 1.0
+     */
+    public function __clone() {
+        _doing_it_wrong( __FUNCTION__, __( 'Cloning is forbidden.', '{%= text_domain %}' ), '1.0.0' );
+    }
+
+    /**
+     * Unserializing instances of this class is forbidden.
+     *
+     * @since 1.0
+     */
+    public function __wakeup() {
+        _doing_it_wrong( __FUNCTION__, __( 'Unserializing instances of this class is forbidden.', '{%= text_domain %}' ), '2.1' );
+    }
+
+    /**
+     * Magic getter to bypass referencing plugin.
+     *
+     * @param $prop
+     *
+     * @return mixed
+     */
+    public function __get( $prop ) {
+        if ( array_key_exists( $prop, $this->container ) ) {
+            return $this->container[ $prop ];
+        }
+
+        return $this->{$prop};
+    }
+
+    /**
+     * Magic isset to bypass referencing plugin.
+     *
+     * @param $prop
+     *
+     * @return mixed
+     */
+    public function __isset( $prop ) {
+        return isset( $this->{$prop} ) || isset( $this->container[ $prop ] );
+    }
+
+    /**
+     * EverProjects Constructor.
+     */
+    public function setup() {
+        $this->check_environment();
+        $this->define_constants();
+        $this->includes();
+        $this->init_hooks();
+        $this->plugin_init();
+        do_action( '{%= function_prefix %}_loaded' );
+    }
+
+    /**
+     * Ensure theme and server variable compatibility
+     */
+    public function check_environment() {
+        if ( version_compare( PHP_VERSION, $this->min_php, '<=' ) ) {
+            deactivate_plugins( plugin_basename( __FILE__ ) );
+
+            wp_die( "Unsupported PHP version Min required PHP Version:{$this->min_php}" );
+        }
+    }
+
+    /**
+     * Define EverProjects Constants.
+     *
+     * @since 1.0.0
+     * @return void
+     */
+    private function define_constants() {
+        //$upload_dir = wp_upload_dir( null, false );
+        define( '{%= constant_prefix %}_VERSION', $this->version );
+        define( '{%= constant_prefix %}_FILE', __FILE__ );
+        define( '{%= constant_prefix %}_PATH', dirname( {%= constant_prefix %}_FILE ) );
+        define( '{%= constant_prefix %}_INCLUDES', {%= constant_prefix %}_PATH . '/includes' );
+        define( '{%= constant_prefix %}_URL', plugins_url( '', {%= constant_prefix %}_FILE ) );
+        define( '{%= constant_prefix %}_ASSETS_URL', {%= constant_prefix %}_URL . '/assets' );
+        define( '{%= constant_prefix %}_TEMPLATES_DIR', {%= constant_prefix %}_PATH . '/templates' );
+    }
+
+
+    /**
+     * What type of request is this?
+     *
+     * @param  string $type admin, ajax, cron or frontend.
+     *
+     * @return bool
+     */
+    private function is_request( $type ) {
+        switch ( $type ) {
+            case 'admin':
+                return is_admin();
+            case 'ajax':
+                return defined( 'DOING_AJAX' );
+            case 'cron':
+                return defined( 'DOING_CRON' );
+            case 'frontend':
+                return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
+        }
+    }
+
+
+    /**
+     * Include required core files used in admin and on the frontend.
+     */
+    public function includes() {
+        //core includes
+		include_once {%= constant_prefix %}_INCLUDES . '/core-functions.php';
+		include_once {%= constant_prefix %}_INCLUDES . '/class-install.php';
+		include_once {%= constant_prefix %}_INCLUDES . '/class-post-types.php';
+
+		//admin includes
+		if ( $this->is_request( 'admin' ) ) {
+			include_once {%= constant_prefix %}_INCLUDES . '/admin/class-admin.php';
+		}
+
+		//frontend includes
+		if ( $this->is_request( 'frontend' ) ) {
+			include_once {%= constant_prefix %}_INCLUDES . '/class-frontend.php';
+		}
+
+    }
+
+    /**
+     * Hook into actions and filters.
+     *
+     * @since 2.3
+     */
+    private function init_hooks() {
+        // Localize our plugin
+        add_action( 'init', array( $this, 'localization_setup' ) );
+
+        //add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_action_links' ) );
+    }
+
+    /**
+     * Initialize plugin for localization
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function localization_setup() {
+        load_plugin_textdomain( '{%= text_domain %}', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+    }
+
+    /**
+     * Plugin action links
+     *
+     * @param  array $links
+     *
+     * @return array
+     */
+    public function plugin_action_links( $links ) {
+        //$links[] = '<a href="' . admin_url( 'admin.php?page=' ) . '">' . __( 'Settings', '' ) . '</a>';
+        return $links;
+    }
+
+    public function plugin_init() {
+        new \Pluginever\{%= class_name %}\PostTypes();
+    }
+
+    /**
+     * Get the plugin url.
+     *
+     * @return string
+     */
+    public function plugin_url() {
+        return untrailingslashit( plugins_url( '/', {%= constant_prefix %}_FILE ) );
+    }
+
+    /**
+     * Get the plugin path.
+     *
+     * @return string
+     */
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( {%= constant_prefix %}_FILE ) );
+    }
+
+    /**
+     * Get the template path.
+     *
+     * @return string
+     */
+    public function template_path() {
+        return {%= constant_prefix %}_TEMPLATES_DIR;
+    }
+
 }
+
+function {%= function_prefix %}(){
+    return {%= class_name %}::instance();
+}
+
+//fire off the plugin
+{%= function_prefix %}();

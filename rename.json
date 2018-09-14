@@ -1,8 +1,4 @@
 {
-	"plugin.php": "{%= wpfilename %}.php",
-	"assets/css/less/plugin.less": "assets/css/less/{%= wpfilename %}.less",
-	"assets/css/sass/plugin.scss": "assets/css/sass/{%= wpfilename %}.scss",
-	"assets/css/src/plugin.css": "assets/css/src/{%= wpfilename %}.css",
-	"assets/js/src/plugin.js": "assets/js/src/{%= wpfilename %}.js",
-	"languages/plugin.pot": "languages/{%= prefix %}.pot"
+  "plugin.php": "{%= wpfilename %}.php",
+  "languages/plugin.pot": "i18n/languages/{%= wpfilename %}.pot"
 }
