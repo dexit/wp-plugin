@@ -79,13 +79,12 @@ class Frontend {
 	 */
 	public function enqueue_scripts( $hook ) {
 		$suffix = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
-		wp_register_style('{%= slug %}', {%= constant_prefix %}_ASSETS."/css/frontend{$suffix}.css", [], {%= constant_prefix %}_VERSION);
-		wp_register_script('{%= slug %}', {%= constant_prefix %}_ASSETS."/js/frontend/frontend{$suffix}.js", ['jquery'], {%= constant_prefix %}_VERSION, true);
+		wp_register_style('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/css/frontend{$suffix}.css", [], {%= constant_prefix %}_VERSION);
+		wp_register_script('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/js/frontend/frontend{$suffix}.js", ['jquery'], {%= constant_prefix %}_VERSION, true);
 		wp_localize_script('{%= slug %}', '{%= js_object %}', ['ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => '{%= slug %}']);
 		wp_enqueue_style('{%= slug %}');
 		wp_enqueue_script('{%= slug %}');
 	}
-
 
 }
 
