@@ -116,6 +116,7 @@ module.exports = function (grunt) {
 			}
 		},
 
+<<<<<<< HEAD
 		// Watch changes for assets.
 		watch: {
 			css: {
@@ -132,6 +133,97 @@ module.exports = function (grunt) {
 				tasks: ['jshint', 'uglify']
 			}
 		},
+=======
+        /**
+         * check WP Coding standards
+         * https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+         */
+        phpcs: {
+            application: {
+                dir: [
+                    '**/*.php',
+                    '!**/node_modules/**'
+                ]
+            },
+            options: {
+                bin: '~/phpcs/scripts/phpcs',
+                standard: 'WordPress'
+            }
+        },
+           // Generate POT files.
+        makepot: {
+            target: {
+                options: {
+                    exclude: ['build/.*', 'node_modules/*', 'assets/*'],
+                        domainPath: '/i18n/languages/', // Where to save the POT file.
+                        potFilename: '{%= wpfilename %}.pot', // Name of the POT file.
+                        type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
+                        potHeaders: {
+                        'report-msgid-bugs-to': 'http://pluginever.com/support/',
+                            'language-team': 'LANGUAGE <support@pluginever.com>'
+                    }
+                }
+            }
+        },
+            // Clean up build directory
+        clean: {
+            main: ['build/']
+        },
+          copy: {
+        main: {
+            src: [
+                     '**',
+                    '!node_modules/**',
+                    '!**/js/src/**',
+                    '!**/css/src/**',
+                    '!**/js/vendor/**',
+                    '!**/css/vendor/**',
+                    '!**/images/src/**',
+                    '!**/sass/**',
+                    '!build/**',
+                    '!**/*.md',
+                    '!.idea/**',
+                    '!bin/**',
+                    '!.git/**',
+                    '!Gruntfile.js',
+                    '!package.json',
+                    '!composer.json',
+                    '!composer.lock',
+                    '!debug.log',
+                    '!.gitignore',
+                    '!.gitmodules',
+                    '!npm-debug.log',
+                    '!plugin-deploy.sh',
+                    '!export.sh',
+                    '!config.codekit',
+                    '!nbproject/*',
+                    '!tests/**',
+                    '!.csscomb.json',
+                    '!.editorconfig',
+                    '!.jshintrc',
+                    '!.tmp'
+            ],
+                dest: 'build/'
+        }
+    },
+      compress: {
+        main: {
+            options: {
+                mode: 'zip',
+                    archive: './build/{%= name %}-' + pkg.version + '.zip'
+            },
+            expand: true,
+                cwd: 'build/',
+                src: ['**/*'],
+                dest: '{%= name %}'
+        }
+    },
+    server: {
+        options: {
+            message: 'Server is ready!'
+        }
+    }
+>>>>>>> 94ffb4fd46f9efa650d12ce92becaf4397de0fa5
 
 		// Generate POT files.
 		makepot: {
@@ -227,6 +319,7 @@ module.exports = function (grunt) {
 			}
 		},
 
+<<<<<<< HEAD
 		// Clean up build directory
 		clean: {
 			main: ['build/']
@@ -347,3 +440,9 @@ module.exports = function (grunt) {
 			'compress'
 		]);
 };
+=======
+    grunt.registerTask('release', ['makepot', 'zip']);
+    grunt.registerTask('zip', ['clean', 'copy', 'compress']);
+    grunt.util.linefeed = '\n';
+};
+>>>>>>> 94ffb4fd46f9efa650d12ce92becaf4397de0fa5
