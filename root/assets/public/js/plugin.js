@@ -1,5 +1,5 @@
 /**
- * {%= title %}
+ * {%= title %} Public
  * {%= homepage %}
  *
  * Copyright (c) {%= grunt.template.today('yyyy') %} {%= author_name %}
@@ -9,16 +9,17 @@
 /*jslint browser: true */
 /*global jQuery:false */
 
-window.{%= class_name %} = (function(window, document, $, undefined){
+window.{%= js_safe_name %}_Public = (function(window, document, $, undefined){
 	'use strict';
 
-	var app = {};
+	var app = {
 
-	app.init = function() {
+        initialize: function(){
 
+        }
 	};
 
-	$(document).ready( app.init );
+	$(document).ready( app.initialize );
 
 	return app;
 
