@@ -30,7 +30,8 @@ exports.template = function (grunt, init, done) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1)
                     .toLowerCase();
             })
-            .replace(/^wp/gi, 'WP');
+            .replace(/^wp/gi, 'WP')
+            .replace(/^wc/gi, 'WC');
 
         var plugin_slug = props.title.replace(/\s+/g, '-').toLowerCase();
         var constant_prefix = 'WP'.concat(plugin_capitalized_name.replace(/^WP/gi, '').match(/\b(\w)/g).join('')); //includeing WP
