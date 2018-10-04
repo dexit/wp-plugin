@@ -8,27 +8,15 @@
 
 /*jslint browser: true */
 /*global jQuery:false */
-
-window.{%= js_safe_name %}_admin = (function(window, document, $, undefined){
-	'use strict';
-
-    var app = {
-
-        initialize: function(){
+/*global {%= js_safe_name %}:false */
+jQuery(document).ready(function ($, window, document, undefined) {
+    'use strict';
+    $.{%= js_safe_name %} = {
+        init: function () {
 
         }
     };
 
-    $(document).ready( app.initialize );
 
-	return app;
-
-})(window, document, jQuery);
-
-jQuery(document).ready(function ($, window, document, undefined) {
-	'use strict';
-	$.wc_variation_images = {
-        init: function () {
-			
-		}
-    }
+    $.{%= js_safe_name %}.init();
+});
