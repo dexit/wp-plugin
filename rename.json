@@ -1,4 +1,4 @@
 {
   "plugin.php": "{%= wpfilename %}.php",
-  "languages/plugin.pot": "i18n/languages/{%= wpfilename %}.pot"
+  "languages/languages/plugin.pot": "i18n/languages/{%= wpfilename %}.pot"
 }

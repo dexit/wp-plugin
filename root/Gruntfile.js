@@ -240,6 +240,7 @@ module.exports = function (grunt) {
 					'!**/css/src/**',
 					'!**/js/vendor/**',
 					'!**/css/vendor/**',
+					'!**/css/*.scss',
 					'!**/images/src/**',
 					'!**/sass/**',
 					'!build/**',
@@ -253,7 +254,9 @@ module.exports = function (grunt) {
 					'!package.json',
 					'!composer.json',
 					'!composer.lock',
+					'!package-lock.json',
 					'!debug.log',
+					'!none',
 					'!.gitignore',
 					'!.gitmodules',
 					'!phpcs.xml.dist',
@@ -339,6 +342,12 @@ module.exports = function (grunt) {
 			'default',
 			'i18n'
 		]);
+
+	grunt.registerTask('build',
+	[
+		'clean',
+		'zip'
+	]);
 
 	grunt.registerTask('zip',
 		[
