@@ -45,6 +45,7 @@ class Admin {
 	public function includes() {
 		require_once dirname( __FILE__ ) . '/class-admin-menu.php';
 		require_once dirname( __FILE__ ) . '/class-metabox.php';
+		require_once dirname( __FILE__ ) . '/class-settings-api.php';
 		require_once dirname( __FILE__ ) . '/class-settings.php';
 	}
 
@@ -78,11 +79,12 @@ class Admin {
 
 	public function enqueue_scripts( $hook ) {
 		$suffix = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
-		wp_register_style('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/css/admin.css", [], {%= constant_prefix %}_VERSION);
-		wp_register_script('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/js/admin/admin{$suffix}.js", ['jquery'], {%= constant_prefix %}_VERSION, true);
-		wp_localize_script('{%= slug %}', '{%= js_object %}', ['ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => '{%= slug %}']);
-		wp_enqueue_style('{%= slug %}');
-		wp_enqueue_script('{%= slug %}');
+		//styles
+		wp_enqueue_style('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/css/admin.css", [], {%= constant_prefix %}_VERSION);
+		
+		//scripts
+		wp_enqueue_script('{%= slug %}', {%= constant_prefix %}_ASSETS_URL."/js/admin/admin{$suffix}.js", ['jquery'], {%= constant_prefix %}_VERSION, true);
+		wp_enqueue_script('{%= slug %}', '{%= js_object %}', ['ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => '{%= slug %}']);
 	}
 
 
