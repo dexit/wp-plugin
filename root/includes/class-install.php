@@ -11,9 +11,6 @@ class Install {
     }
 
     public static function install() {
-        if ( get_option( '{%= function_prefix %}_install_date' ) ) {
-            return;
-        }
 
         if ( ! is_blog_installed() ) {
             return;
