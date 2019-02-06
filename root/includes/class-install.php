@@ -1,7 +1,6 @@
 <?php
-namespace Pluginever\{%= class_name %};
 
-class Install {
+class {%= constant_prefix %}Install {
     /**
      * Install constructor.
      */

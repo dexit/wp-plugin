@@ -1,7 +1,4 @@
 <?php
-
-namespace Pluginever\{%= class_name %};
-
-class FormHandler {
+class {%= prefix %}_Form_Handler {
 
 }

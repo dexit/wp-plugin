@@ -16,6 +16,7 @@ exports.warnOn = '*';
 exports.template = function (grunt, init, done) {
     init.process({}, [
         init.prompt('title', 'WP Plugin'),
+        init.prompt('unique_prefix', 'PLVR'),
         init.prompt('description', 'The Best WordPress Plugin ever made!'),
         init.prompt('homepage', 'https://www.pluginever.com'),
         init.prompt('author_name', 'pluginever'),
@@ -24,30 +25,25 @@ exports.template = function (grunt, init, done) {
     ], function (err, props) {
         props.keywords = [];
         props.version = '1.0.0';
-        //sanitize the plugin name
-        var plugin_capitalized_name = props.title
-            .replace(/\w\S*/g, function (txt) {
-                return txt.charAt(0).toUpperCase() + txt.substr(1)
-                    .toLowerCase();
-            })
-            .replace(/^wp/gi, 'WP')
-            .replace(/^wc/gi, 'WC');
 
+        //sanitize the plugin name
+        props.title = props.title
+            .replace(/^wp/gi, 'WP')
+            .replace(/^wc/gi, 'WC')
+            .replace(/^WooCommerce/gi, 'WC')
+        
         var plugin_slug = props.title.replace(/\s+/g, '-').toLowerCase();
-        var constant_prefix = 'WP'.concat(plugin_capitalized_name.replace(/^WP/gi, '').match(/\b(\w)/g).join('')); //includeing WP
-        var function_prefix = plugin_slug.replace(/^wp?-/g, '').replace(/\-/g, '_'); //excluding wp
+        var function_prefix = plugin_slug.replace(/^wp?-/g, '').replace(/\-/g, '_');
 
         props.name = plugin_slug;
-        props.title = plugin_capitalized_name;
         props.slug = plugin_slug;
         props.text_domain = plugin_slug;
-        props.constant_prefix = constant_prefix;
         props.function_prefix = function_prefix;
+        props.prefix = props.unique_prefix;
         props.js_safe_name = plugin_slug.replace(/-/g, '_');
-        props.class_name = plugin_capitalized_name.replace(/^wp/gi, '').replace(/\s/g, '');
-        props.namespace = props.class_name.replace(/^wp/gi, '').replace(/\s/g, '');
+        props.class_name = props.title.replace(/^wp/gi, '').replace(/\s/g, '');
         props.wpfilename = plugin_slug;
-        props.js_object = constant_prefix.toLocaleLowerCase();
+        props.js_object = props.unique_prefix.toLocaleLowerCase();
         props.scripts = {
             "build": "grunt",
             "build-watch": "grunt watch"
@@ -84,7 +80,8 @@ exports.template = function (grunt, init, done) {
             "node": ">=8.9.3",
             "npm": ">=5.5.1"
         };
-
+        
+        console.log(props);
         // Files to copy and process
         var files = init.filesToCopy(props);
 

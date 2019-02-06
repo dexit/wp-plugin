@@ -1,6 +1,6 @@
 <?php
 
-namespace Pluginever\{%= class_name %}\Admin;
+
 class Settings {
     private $settings_api;
 

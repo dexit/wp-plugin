@@ -1,11 +1,13 @@
 <?php
+// don't call the file directly
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Plugin Upgrade Routine
  *
  * @since 1.0.0
  */
-class {%= class_name %}_Upgrades {
+class {%= prefix %}_Upgrades {
 
     /**
      * The upgrades
@@ -22,7 +24,7 @@ class {%= class_name %}_Upgrades {
      * @return string
      */
     public function get_version() {
-        return get_option( '{%= prefix %}_version' );
+        return get_option( '{%= function_prefix %}_version' );
     }
 
     /**
@@ -37,7 +39,7 @@ class {%= class_name %}_Upgrades {
             return false;
         }
 
-        if ( version_compare( $this->get_version(), '{%= constant_prefix %}_VERSION', '<' ) ) {
+        if ( version_compare( $this->get_version(), '{%= function_prefix %}_VERSION', '<' ) ) {
             return true;
         }
 
@@ -56,10 +58,11 @@ class {%= class_name %}_Upgrades {
         foreach ( self::$upgrades as $version => $file ) {
             if ( version_compare( $installed_version, $version, '<' ) ) {
                 include $path . $file;
-                update_option( '{%= prefix %}_version', $version );
+                update_option( '{%= function_prefix %}_version', $version );
             }
         }
 
-        update_option( '{%= prefix %}_version', '{%= constant_prefix %}_VERSION' );
+        update_option( '{%= function_prefix %}_version', '{%= function_prefix %}_VERSION' );
     }
 }
+new {%= prefix %}_Upgrades();

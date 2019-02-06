@@ -1,7 +1,4 @@
 <?php
-
-namespace Pluginever\{%= class_name %};
-
-class Ajax {
+class {%= prefix %}_Ajax {
 
 }
